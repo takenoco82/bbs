@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  ap:
+    image: ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_REPOSITORY}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"

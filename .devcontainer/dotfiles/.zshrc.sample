@@ -1,0 +1,8 @@
+# Aliases
+alias la="ls -a"
+alias ll="ls -la"
+alias lt="ls -lat"
+
+# Starship
+# https://github.com/starship/starship
+eval "$(starship init zsh)"

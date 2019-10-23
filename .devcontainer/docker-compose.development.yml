@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  ap:
+    image: ${IMAGE_AP_REPOSITORY}:development
+    # NOTE: 何故かビルドできない...
+    # build:
+    #   dockerfile: ./.devcontainer/Dockerfile
+    #   context: .
+    ports:
+      - "5000"
+    volumes:
+      - .:/workspace
+      # ホストのホームディレクトリ
+      - ~:/localhost_home:ro
+      # Dokcerコンテナ内からDockerを使う Docker outside of Docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: /bin/sh -c "while sleep 1000; do :; done"

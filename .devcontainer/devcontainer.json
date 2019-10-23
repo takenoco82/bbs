@@ -1,0 +1,33 @@
+// See https://aka.ms/vscode-remote/devcontainer.json for format details.
+{
+    // A display name for the container.
+    "name": "Remote Container BBS",
+    // Required. An ordered list of paths to Docker Compose files relative to the devcontainer.json file.
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "docker-compose.development.yml"
+    ],
+    // Required. The name of the service VS Code should connect to once running.
+    "service": "ap",
+    "workspaceFolder": "/workspace",
+    "extensions": [
+        // "arjun.swagger-viewer",
+        // "berublan.vscode-log-viewer",
+        // "donjayamanne.githistory",
+        "eamodio.gitlens",
+        // "gruntfuggly.todo-tree",
+        "humao.rest-client",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "njpwerner.autodocstring",
+        // "ryu1kn.partial-diff",
+        "saikou9901.evilinspector",
+        // "shd101wyy.markdown-preview-enhanced",
+        "wmaurer.change-case"
+        // "yzhang.markdown-all-in-one"
+    ],
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/zsh"
+    },
+    "postCreateCommand": "sh ./.devcontainer/setup.sh"
+}
