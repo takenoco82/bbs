@@ -1,0 +1,36 @@
+# Common
+README.md
+CHANGELOG.md
+
+
+# Circle CI
+.circleci
+
+
+# VS Code
+.vscode
+
+
+# Git
+.git
+.gitignore
+
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.py[cod]
+*$py.class
+
+
+# Unit test / coverage reports
+.pytest_cache
+
+
+# Environments
+.venv
