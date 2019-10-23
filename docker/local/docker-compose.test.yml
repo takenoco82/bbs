@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  ap:
+    image: ${IMAGE_AP_REPOSITORY}:test
+    build:
+      target: test
+      context: .
+      dockerfile: ./src/Dockerfile

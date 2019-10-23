@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  ap:
+    build:
+      target: production
+      context: .
+      dockerfile: ./src/Dockerfile
+    ports:
+      - "5000"
