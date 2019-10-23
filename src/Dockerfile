@@ -28,7 +28,7 @@ RUN poetry install
 
 # copy production and test code
 COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
-COPY ./src/app ./app
+# COPY ./src/app ./app
 COPY ./src/tests ./tests
 
 # lint
@@ -43,7 +43,7 @@ CMD [ "test" ]
 FROM base as production
 # copy production code
 COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
-COPY ./src/app ./app
+# COPY ./src/app ./app
 
 # listen port
 EXPOSE 5000
