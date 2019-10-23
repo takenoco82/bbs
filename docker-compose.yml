@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   ap:
-    image: ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_REPOSITORY}
+    image: ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG}
     logging:
       driver: "json-file"
       options:
