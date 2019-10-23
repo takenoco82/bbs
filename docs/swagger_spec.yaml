@@ -81,6 +81,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         description: Created message object
         content:
@@ -126,6 +127,7 @@ components:
           $ref: '#/components/schemas/Thread'
         id:
           type: string
+          format: uuid
           readOnly: true
         content:
           type: string
@@ -160,6 +162,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
           readOnly: true
         title:
           type: string
