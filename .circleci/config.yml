@@ -1,0 +1,16 @@
+version: 2.1
+jobs:
+  build:
+    environment:
+      IMAGE_AP_REPOSITORY: bbs
+      IMAGE_AP_TAG: test
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 18.06.0-ce
+          docker_layer_caching: false
+      - run:
+          name: Build Docker image
+          command: docker build --target test -t ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} .
