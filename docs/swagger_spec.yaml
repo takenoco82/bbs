@@ -1,0 +1,216 @@
+openapi: 3.0.1
+info:
+  title: BBS
+  description: This is a bulletin board system (like 5ch).
+  version: 0.1.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://localhost:5000/api/v1
+tags:
+- name: threads
+- name: messages
+paths:
+  /threads:
+    get:
+      tags:
+      - threads
+      summary: Lists threads.
+      operationId: get_threads
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Threads'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags:
+      - threads
+      summary: Create a new thread.
+      operationId: post_time_entry
+      requestBody:
+        description: Created thread object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Thread'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/Thread'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        415:
+          $ref: '#/components/responses/UnsupportedMediaType'
+  /messages:
+    get:
+      tags:
+      - messages
+      summary: Lists messages of the thread.
+      operationId: get_messages
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Messages'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+  /threads/{thread_id}/messages:
+    post:
+      tags:
+      - messages
+      summary: Create a new message.
+      operationId: post_message
+      parameters:
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Created message object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestMessage'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/Message'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        415:
+          $ref: '#/components/responses/UnsupportedMediaType'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Message:
+      type: object
+      properties:
+        thread:
+          $ref: '#/components/schemas/Thread'
+        id:
+          type: string
+          readOnly: true
+        content:
+          type: string
+          minLength: 1
+          maxLength: 1024
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - content
+        - created_at
+    Messages:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    RequestMessage:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 1024
+      required:
+        - content
+    Thread:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          minLength: 1
+          maxLength: 128
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - title
+        - created_at
+    Threads:
+      type: object
+      properties:
+        threads:
+          type: array
+          items:
+            $ref: '#/components/schemas/Thread'
+  responses:
+    Forbidden:
+      description: Forbidden
+      content: {}
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Message:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+    NoContent:
+      description: No Content
+      content: {}
+    NotFound:
+      description: Not Found
+      content: {}
+    Thread:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Thread'
+    Unauthorized:
+      description: Unauthorized
+      content: {}
+    UnsupportedMediaType:
+      description: Unsupported Media Type
+      content: {}
