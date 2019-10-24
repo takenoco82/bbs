@@ -116,4 +116,4 @@ output.even-row = ""
 
 # Use the -d option to reference a DSN.
 [alias_dsn]
-local = mysql://admin:admin@db:3306/time_tracker
+local = mysql://admin:admin@db:3306/bbs
