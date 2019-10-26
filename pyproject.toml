@@ -9,6 +9,7 @@ python = "^3.7"
 flask = "^1.1"
 Flask-SQLAlchemy = "^2.4"
 PyMySQL = "^0.9.3"
+Flask-Migrate = "^2.5"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
