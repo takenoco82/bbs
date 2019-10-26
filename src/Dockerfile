@@ -26,9 +26,10 @@ FROM base as test
 # install develop packages of python to system
 RUN poetry install
 
-# copy production and test code
+# copy production, migrations and test code
 COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
-# COPY ./src/app ./app
+COPY ./src/app ./app
+COPY ./src/migrations ./migrations
 COPY ./src/tests ./tests
 
 # lint
@@ -41,9 +42,10 @@ CMD [ "test" ]
 
 
 FROM base as production
-# copy production code
+# copy production and migrations code
 COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
-# COPY ./src/app ./app
+COPY ./src/app ./app
+COPY ./src/migrations ./migrations
 
 # listen port
 EXPOSE 5000

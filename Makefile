@@ -56,6 +56,19 @@ test:
 		-p ${PROJECT_DIR_NAME}_test \
 		down -v
 
+# DBマイグレーションの実行
+db_migrate: build
+	docker run --rm -i -t --network bbs_default \
+		${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} \
+		flask db upgrade
+
+# DBの初期化
+db_init:
+	docker run --rm -i -t --network bbs_default \
+		mysql:8.0.15 \
+		bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -h db -u ${MYSQL_USER} ${MYSQL_DATABASE} -e \
+				"DROP DATABASE IF EXISTS ${MYSQL_DATABASE}; CREATE DATABASE ${MYSQL_DATABASE};"'
+
 # 開発用のイメージをビルド
 build_dev:
 	docker build \
