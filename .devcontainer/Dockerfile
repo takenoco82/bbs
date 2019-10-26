@@ -51,6 +51,7 @@ RUN apk add --no-cache curl && \
 # application configure
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=development
+ENV BBS_APP_CONFIG=development
 
 # listen port
 EXPOSE 5000

@@ -50,7 +50,7 @@ class TestConfig(Config):
 
 
 def configure_app(app):
-    config_name = os.getenv("TIME_TRACKER_CONFIG", "production")
+    config_name = os.getenv("BBS_APP_CONFIG", "production")
     config_object = import_string(config[config_name])()
     app.config.from_object(config_object)
     # print(app.config)

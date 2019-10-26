@@ -23,6 +23,9 @@ ENV FLASK_ENV=production
 
 
 FROM base as test
+# application configure
+ENV BBS_APP_CONFIG=test
+
 # install develop packages of python to system
 RUN poetry install
 
@@ -42,6 +45,9 @@ CMD [ "test" ]
 
 
 FROM base as production
+# application configure
+ENV BBS_APP_CONFIG=production
+
 # copy production and migrations code
 COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
 COPY ./src/app ./app
