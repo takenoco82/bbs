@@ -40,6 +40,10 @@
         // "./setup.cfg"
     ],
     "python.pythonPath": ".venv/bin/python",
+    "python.autoComplete.extraPaths": [
+        // srcディレクトリ内のモジュールを補完できるようにする
+        "${workspaceFolder}/src"
+    ],
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": false,
