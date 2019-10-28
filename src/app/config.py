@@ -3,7 +3,7 @@ import os
 from werkzeug.utils import import_string
 
 
-config = {
+config_mode = {
     "production": "app.config.ProductionConfig",
     "development": "app.config.DevelopmentConfig",
     "test": "app.config.TestConfig",
@@ -49,8 +49,11 @@ class TestConfig(Config):
     SQLALCHEMY_ECHO = True
 
 
-def configure_app(app):
+def get_config_object():
     config_name = os.getenv("BBS_APP_CONFIG", "production")
-    config_object = import_string(config[config_name])()
+    return import_string(config_mode[config_name])()
+
+
+def configure_app(app):
+    config_object = get_config_object()
     app.config.from_object(config_object)
-    # print(app.config)
