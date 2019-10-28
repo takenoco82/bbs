@@ -1,29 +1,17 @@
 from flask import Flask
 
 from app.config import configure_app
+from app.controllers import __all__ as apis
 from app.database import init_db
 import app.models
-
 
 app = Flask(__name__)  # noqa
 configure_app(app)
 init_db(app)
 
-
-@app.route('/')
-def hello():
-    name = "Hello World\n"
-    return name
-
-
-@app.route('/threads')
-def get_threads():
-    from app.models import Thread
-    from app.schemas import ThreadSchema
-    from flask import jsonify
-
-    threads = Thread.query.order_by(Thread.updated_at.asc()).all()
-    return jsonify({"threads": ThreadSchema(many=True).dump(threads)}), 200
+# Blueprintの登録
+for api in apis:
+    app.register_blueprint(api)
 
 
 if __name__ == "__main__":
