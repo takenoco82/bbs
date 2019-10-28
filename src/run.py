@@ -16,5 +16,15 @@ def hello():
     return name
 
 
+@app.route('/threads')
+def get_threads():
+    from app.models import Thread
+    from app.schemas import ThreadSchema
+    from flask import jsonify
+
+    threads = Thread.query.order_by(Thread.updated_at.asc()).all()
+    return jsonify({"threads": ThreadSchema(many=True).dump(threads)}), 200
+
+
 if __name__ == "__main__":
     app.run("0.0.0.0", debug=True)
