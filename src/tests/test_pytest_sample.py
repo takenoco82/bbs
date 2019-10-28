@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.mark.small
-class TestPytestSample:
+class TestPytestBasic:
     def test_ok(self):
         pass
 
@@ -52,7 +52,13 @@ class TestPytestSample:
         expected = [{"value": 3}, {"aha": 3}, {"value": 2}]
         assert actual == expected
 
-    # [Parametrizing tests — pytest documentation](http://doc.pytest.org/en/latest/example/parametrize.html)  # noqa
+
+@pytest.mark.small
+class TestPytestParametrize:
+    """Parametrizing tests — pytest documentation
+
+    http://doc.pytest.org/en/latest/example/parametrize.html
+    """
     @pytest.mark.parametrize(
         "test_input, expected",
         [
@@ -63,6 +69,41 @@ class TestPytestSample:
     )
     def test_eval(self, test_input, expected):
         assert eval(test_input) == expected
+
+
+@pytest.mark.small
+class TestPytestFixture:
+    """Monkeypatching/mocking modules and environments — pytest documentation
+
+    https://docs.pytest.org/en/latest/monkeypatch.html
+    """
+    def get_os_user_lower(self):
+        """Simple retrieval function.
+        Returns lowercase USER or raises EnvironmentError."""
+
+        import os
+        username = os.getenv("USER")
+
+        if username is None:
+            raise OSError("USER environment is not set.")
+
+        return username.lower()
+
+    @pytest.fixture
+    def mock_env_user(self, monkeypatch):
+        monkeypatch.setenv("USER", "TestingUser")
+
+    @pytest.fixture
+    def mock_env_missing(self, monkeypatch):
+        monkeypatch.delenv("USER", raising=False)
+
+    # notice the tests reference the fixtures for mocks
+    def test_upper_to_lower(self, mock_env_user):
+        assert self.get_os_user_lower() == "testinguser"
+
+    def test_raise_exception(self, mock_env_missing):
+        with pytest.raises(OSError):
+            _ = self.get_os_user_lower()
 
 
 if __name__ == "__main__":
