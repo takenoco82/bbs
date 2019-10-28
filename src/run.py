@@ -1,17 +1,14 @@
 from flask import Flask
 
 from app.config import configure_app
-from app.controllers import __all__ as apis
 from app.database import init_db
+from app.api import register_blueprint
 import app.models
 
 app = Flask(__name__)  # noqa
 configure_app(app)
 init_db(app)
-
-# Blueprintの登録
-for api in apis:
-    app.register_blueprint(api)
+register_blueprint(app)
 
 
 if __name__ == "__main__":

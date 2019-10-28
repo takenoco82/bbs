@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 
+from app.api.schemas import ThreadSchema
 from app.models import Thread
-from app.schemas import ThreadSchema
 
 
 bp = Blueprint("get_threads", __name__)
