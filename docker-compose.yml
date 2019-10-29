@@ -1,8 +1,28 @@
 version: '3.7'
 
 services:
+  web:
+    image: nginx:1.17.5-alpine
+    ports:
+      - "80"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/conf.d:/etc/nginx/conf.d:ro
+    # nginx - Docker Hub
+    # Running nginx in debug mode
+    #   https://hub.docker.com/_/nginx
+    command: [nginx-debug, '-g', 'daemon off;']
+    depends_on:
+      - ap
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
   ap:
     image: ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG}
+    depends_on:
+      - db
     logging:
       driver: "json-file"
       options:

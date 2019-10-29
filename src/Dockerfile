@@ -14,8 +14,13 @@ RUN apk add --no-cache curl && \
 
 # install default packages of python to system
 COPY ./poetry.lock ./pyproject.toml ./
-RUN poetry config settings.virtualenvs.create false && \
-    poetry install --no-dev
+RUN apk add --no-cache --virtual=uwsgi-deps \
+    gcc \
+    libc-dev \
+    linux-headers && \
+    poetry config settings.virtualenvs.create false && \
+    poetry install --no-dev && \
+    apk del uwsgi-deps
 
 # application configure
 ENV FLASK_APP=run.py
@@ -30,7 +35,7 @@ ENV BBS_APP_CONFIG=test
 RUN poetry install
 
 # copy production, migrations and test code
-COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
+COPY ./src/docker-entrypoint.sh ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
 COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 COPY ./src/tests ./tests
@@ -49,12 +54,12 @@ FROM base as production
 ENV BBS_APP_CONFIG=production
 
 # copy production and migrations code
-COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
+COPY ./src/docker-entrypoint.sh ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
 COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 
 # listen port
-EXPOSE 5000
+EXPOSE 3031
 
 # run application
 ENTRYPOINT [ "sh", "./docker-entrypoint.sh"]

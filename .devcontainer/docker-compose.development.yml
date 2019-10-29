@@ -7,8 +7,6 @@ services:
     # build:
     #   dockerfile: ./.devcontainer/Dockerfile
     #   context: .
-    ports:
-      - "5000"
     volumes:
       - .:/workspace
       # ホストのホームディレクトリ

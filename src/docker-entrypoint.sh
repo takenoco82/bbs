@@ -18,6 +18,7 @@ Usage: sh $(pwd)/$(basename "$0") <command>
 
   command
     run     Start application
+    dev     Start develop server
     test    Run test
     help    Show this help
 
@@ -68,9 +69,13 @@ function main() {
   case $1 in
     run)
       info "application start"
+      uwsgi --ini uwsgi.ini
+      ;;
+    dev)
+      info "develop server start"
       # Quickstart — Flask Documentation (1.1.x) - Externally Visible Server
       #   https://flask.palletsprojects.com/en/1.1.x/quickstart/
-      flask run --host 0.0.0.0
+      flask run --host 0.0.0.0 --port 5000
       ;;
     test)
       # NOTE 今はまだないのでコメントアウトしておく

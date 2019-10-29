@@ -54,10 +54,15 @@ ENV FLASK_ENV=development
 ENV BBS_APP_CONFIG=development
 
 # listen port
-EXPOSE 5000
+EXPOSE 3031
 
 # install default & develop packages of python to virtualenv
 WORKDIR /workspace
+# poetry install で必要になるパッケージをインストールする
+RUN apk add --no-cache --virtual=uwsgi-deps \
+    gcc \
+    libc-dev \
+    linux-headers
 # NOTE: 結局マウントするけど、コピーしておかないと起動時にエラーになるのでコピーしておく
 COPY ./.devcontainer ./.devcontainer
 ENTRYPOINT [ "sh", "./.devcontainer/docker-entrypoint.sh" ]
