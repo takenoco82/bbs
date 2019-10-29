@@ -43,7 +43,7 @@ class TestConfigMode:
             ("production", ProductionConfig),
             ("development", DevelopmentConfig),
             ("test", TestConfig),
-        ]
+        ],
     )
     def test_get_config_object(self, monkeypatch, input, expected):
         from app.config import get_config_object

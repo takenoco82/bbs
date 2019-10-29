@@ -59,6 +59,7 @@ class TestPytestParametrize:
 
     http://doc.pytest.org/en/latest/example/parametrize.html
     """
+
     @pytest.mark.parametrize(
         "test_input, expected",
         [
@@ -77,11 +78,13 @@ class TestPytestFixture:
 
     https://docs.pytest.org/en/latest/monkeypatch.html
     """
+
     def get_os_user_lower(self):
         """Simple retrieval function.
         Returns lowercase USER or raises EnvironmentError."""
 
         import os
+
         username = os.getenv("USER")
 
         if username is None:
