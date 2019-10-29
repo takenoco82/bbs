@@ -11,3 +11,7 @@ class Thread(db.Model):
     title = Column(String(128), nullable=False)
     created_at = Column(AwareDateTime, nullable=False)
     updated_at = Column(AwareDateTime, nullable=False)
+
+    @classmethod
+    def find_list(cls):
+        return Thread.query.order_by(Thread.updated_at.asc()).all()
