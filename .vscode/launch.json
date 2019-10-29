@@ -12,6 +12,18 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Python: pytest Current File",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "--verbose",
+                "${file}"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/src"
+        },
+        {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
