@@ -12,6 +12,7 @@ PyMySQL = "^0.9.3"
 Flask-Migrate = "^2.5"
 flask-marshmallow = "^0.10.1"
 uwsgi = "^2.0"
+uwsgitop = "^0.11.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
