@@ -26,6 +26,9 @@ RUN apk add --no-cache --virtual=uwsgi-deps \
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=production
 
+# create the directory to place uwsgi pid file
+RUN mkdir -p /var/run/uwsgi
+
 
 FROM base as test
 # application configure
