@@ -30,5 +30,14 @@ class TestThreadSchema:
 
     def test_load_exception(self):
         schema = ThreadSchema()
-        with pytest.raises(ValidationError):
+        with pytest.raises(ValidationError) as e:
             schema.load({})
+
+        assert e.value.args == (
+            {
+                "title": {
+                    "message": "Missing data for required field.",
+                    "code": "required",
+                }
+            },
+        )

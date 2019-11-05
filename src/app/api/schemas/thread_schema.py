@@ -8,7 +8,15 @@ from app.models import Thread
 
 class ThreadSchema(Schema):
     id = fields.Str()
-    title = fields.Str(required=True)
+    title = fields.Str(
+        required=True,
+        error_messages={
+            "required": {
+                "message": "Missing data for required field.",
+                "code": "required",
+            }
+        },
+    )
     created_at = fields.DateTime()
 
     @post_load
