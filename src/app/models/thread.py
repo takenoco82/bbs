@@ -15,10 +15,10 @@ class Thread(db.Model):
     def __repr__(self):
         return (
             f"<Thread("
-            f"id={self.id!r} "
-            f"title={self.title!r} "
-            f"created_at={self.created_at!r} "
-            f"updated_at={self.updated_at!r})"
+            f"id={self.id} "
+            f"title={self.title} "
+            f"created_at={self.created_at} "
+            f"updated_at={self.updated_at})"
             ">"
         )
 

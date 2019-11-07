@@ -1,23 +1,19 @@
 import uuid
 from datetime import datetime
 
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, validate
 
 from app.models import Thread
 
 
 class ThreadSchema(Schema):
-    id = fields.Str()
+    id = fields.Str(dump_only=True)
     title = fields.Str(
         required=True,
-        error_messages={
-            "required": {
-                "message": "Missing data for required field.",
-                "code": "required",
-            }
-        },
+        allow_none=False,
+        validate=validate.Length(min=1, max=128)
     )
-    created_at = fields.DateTime()
+    created_at = fields.DateTime(dump_only=True)
 
     @post_load
     def to_model(self, data, **kwargs):

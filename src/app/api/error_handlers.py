@@ -5,13 +5,14 @@ from app.api.schemas import ErrorSchema
 
 def validation_error_handler(error):
     errors = []
-    for error_detail in error.args:
-        for field in error_detail.keys():
+    for field, messages in error.messages.items():
+        for message in messages:
             errors.append(
                 {
                     "field": field,
-                    "code": error_detail[field].get("code"),
-                    "message": error_detail[field].get("message"),
+                    # TODO 後で対応する
+                    "code": None,
+                    "message": message,
                 }
             )
     responseBody = {"errors": ErrorSchema(many=True).dump(errors)}
