@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from unittest import mock
+from unittest.mock import patch
 
 import pytest
 
@@ -71,8 +71,11 @@ class TestGetThreads:
         ],
     )
     def test_2xx(self, patcher, expected):
-        with mock.patch(patcher["target"], return_value=patcher["return_value"]):
+        with patch(patcher["target"], return_value=patcher["return_value"]) as patcher1:
             response = self.client.get(self.url)
+
+            # patch
+            patcher1.assert_called_once()
 
             # status code
             assert response.status_code == expected["status_code"]
