@@ -8,6 +8,7 @@ from app.api import error_handlers
 
 class SampleSchema(Schema):
     field1 = fields.Str(required=True)
+    field2 = fields.Str(required=True)
 
 
 @pytest.mark.small
@@ -20,6 +21,11 @@ class TestErrorHandlers:
                 "errors": [
                     {
                         "field": "field1",
+                        "code": None,
+                        "message": "Missing data for required field.",
+                    },
+                    {
+                        "field": "field2",
                         "code": None,
                         "message": "Missing data for required field.",
                     }

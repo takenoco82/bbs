@@ -5,7 +5,8 @@ from app.api.schemas import ErrorSchema
 
 def validation_error_handler(error):
     errors = []
-    for field, messages in error.messages.items():
+    for field in sorted(error.messages.keys()):
+        messages = error.messages[field]
         for message in messages:
             errors.append(
                 {
