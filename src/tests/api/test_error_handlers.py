@@ -1,8 +1,9 @@
+from unittest.mock import patch
+
 import pytest
 from marshmallow import Schema, ValidationError, fields
 
 from app.api import error_handlers
-from run import app
 
 
 class SampleSchema(Schema):
@@ -11,7 +12,8 @@ class SampleSchema(Schema):
 
 @pytest.mark.small
 class TestErrorHandlers:
-    def test_validation_error_handler(self):
+    @patch("app.api.error_handlers.jsonify")
+    def test_validation_error_handler(self, patcher):
         expetcted = {
             "status_code": 400,
             "body": {
@@ -20,16 +22,16 @@ class TestErrorHandlers:
                         "field": "field1",
                         "code": None,
                         "message": "Missing data for required field.",
-                    },
+                    }
                 ]
             },
         }
 
-        with app.app_context():
-            with pytest.raises(ValidationError) as e:
-                schema = SampleSchema()
-                schema.load({})
+        with pytest.raises(ValidationError) as e:
+            schema = SampleSchema()
+            schema.load({})
 
-            actual = error_handlers.validation_error_handler(e.value)
-            assert actual[1] == expetcted["status_code"]
-            assert actual[0].json == expetcted["body"]
+        actual = error_handlers.validation_error_handler(e.value)
+        assert actual[1] == expetcted["status_code"]
+        patcher.assert_called_once()
+        patcher.assert_called_with(expetcted["body"])
