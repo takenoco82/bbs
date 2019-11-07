@@ -1,9 +1,4 @@
-from datetime import datetime
-from unittest.mock import patch
-from uuid import UUID
-
 import pytest
-from freezegun import freeze_time
 from marshmallow import ValidationError
 
 from app.api.schemas import ThreadSchema
@@ -14,89 +9,87 @@ from app.models import Thread
 class TestThreadSchema:
     # load 正常系
     @pytest.mark.parametrize(
-        ("input", "expected"),
-        [
-            (
-                {"title": "タイトル1"},
-                {
-                    "id": "add96e80-fb11-11e9-bc1d-0242ac170003",
-                    "title": "タイトル1",
-                    "created_at": datetime(2019, 1, 2, 12, 34, 56, 123456),
-                    "updated_at": datetime(2019, 1, 2, 12, 34, 56, 123456),
-                },
-            ),
-        ],
+        ("input", "expected"), [({"title": "タイトル1"}, {"title": "タイトル1"})]
     )
-    @patch("uuid.uuid4", return_value=UUID("add96e80-fb11-11e9-bc1d-0242ac170003"))
-    @freeze_time("2019-01-02 12:34:56.123456")
-    def test_load_normal(self, patcher, input, expected):
+    def test_load_normal(self, input, expected):
         schema = ThreadSchema()
 
         actual = schema.load(input)
         expected = Thread(**expected)
 
-        assert patcher.called
         assert actual.__repr__() == expected.__repr__()
 
     # load(validate)
     @pytest.mark.parametrize(
         ("input", "expected"),
         [
-            # 正常系
+            # 正常系 min length
+            ({"title": "1"}, {"type": AssertionError}),
+            # 正常系 max length
             (
-                {"title": "タイトル1"},
                 {
-                    "type": AssertionError,
-                }
+                    "title": (
+                        "タイトル5678901234567890123456789012345678901234567890"
+                        "12345678901234567890123456789012345678901234567890"
+                        "1234567890123456789012345678"
+                    )
+                },
+                {"type": AssertionError},
             ),
             # 項目なし
             (
                 {},
                 {
                     "type": ValidationError,
-                    "messages": {
-                        "title": ["Missing data for required field."],
-                    }
-                }
+                    "messages": {"title": ["Missing data for required field."]},
+                },
             ),
             # null
             (
                 {"title": None},
                 {
                     "type": ValidationError,
-                    "messages": {
-                        "title": ["Field may not be null."],
-                    }
-                }
+                    "messages": {"title": ["Field may not be null."]},
+                },
             ),
             # under min length
             (
                 {"title": ""},
                 {
                     "type": ValidationError,
-                    "messages": {
-                        "title": ["Length must be between 1 and 128."],
-                    }
-                }
+                    "messages": {"title": ["Length must be between 1 and 128."]},
+                },
             ),
-            # 対象外の項目
+            # over max length
             (
                 {
-                    "id": "add96e80-fb11-11e9-bc1d-0242ac170001",
-                    "title": "タイトル1"
+                    "title": (
+                        "12345678901234567890123456789012345678901234567890"
+                        "12345678901234567890123456789012345678901234567890"
+                        "12345678901234567890123456789"
+                    )
                 },
                 {
                     "type": ValidationError,
-                    "messages": {
-                        "id": ["Unknown field."]
-                    }
-                }
-            )
+                    "messages": {"title": ["Length must be between 1 and 128."]},
+                },
+            ),
+            # invalid type
+            (
+                {"title": 1234},
+                {
+                    "type": ValidationError,
+                    "messages": {"title": ["Not a valid string."]},
+                },
+            ),
+            # 対象外の項目
+            (
+                {"id": "add96e80-fb11-11e9-bc1d-0242ac170001", "title": "タイトル1"},
+                {"type": ValidationError, "messages": {"id": ["Unknown field."]}},
+            ),
         ],
     )
-    @patch("uuid.uuid4", return_value=UUID("add96e80-fb11-11e9-bc1d-0242ac170003"))
-    @freeze_time("2019-01-02 12:34:56.123456")
-    def test_load_validate(self, patcher, input, expected):
+    def test_load_validate(self, input, expected):
         schema = ThreadSchema()
 
         with pytest.raises(expected["type"]) as e:
