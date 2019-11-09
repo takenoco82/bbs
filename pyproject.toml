@@ -26,4 +26,19 @@ build-backend = "poetry.masonry.api"
 
 [tool.black]
 line-length = 100
-exclude = /(\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|_build|buck-out|build|dist|tests)/
+exclude = '''
+/(
+    \.eggs |
+    \.git |
+    \.hg |
+    \.mypy_cache |
+    \.nox |
+    \.tox |
+    \.venv |
+    _build |
+    buck-out |
+    build |
+    dist |
+    tests
+)/
+'''
