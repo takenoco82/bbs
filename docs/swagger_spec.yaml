@@ -33,7 +33,7 @@ paths:
       tags:
       - threads
       summary: Create a new thread.
-      operationId: post_time_entry
+      operationId: post_thread
       requestBody:
         description: Created thread object
         content:

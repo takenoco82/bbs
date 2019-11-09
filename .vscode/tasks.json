@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "test",
+            "label": "python",
             "type": "shell",
-            "command": "poetry run pytest ${file}",
+            "command": "${workspaceFolder}/.venv/bin/python ${file}",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -17,7 +17,30 @@
             },
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}/src"
+                }
+            },
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/pytest ${file}",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}/src"
+                }
             },
         },
         {

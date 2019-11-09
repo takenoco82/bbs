@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal"
+            "console": "internalConsole"
         },
         {
             "name": "Python: pytest Current File",
@@ -20,7 +20,7 @@
                 "--verbose",
                 "${file}"
             ],
-            "console": "integratedTerminal",
+            "console": "internalConsole",
             "cwd": "${workspaceFolder}/src"
         },
         {
@@ -41,7 +41,9 @@
                 "--no-reload"
             ],
             "jinja": true,
-            "cwd": "${workspaceFolder}/src"
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}/src",
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }
