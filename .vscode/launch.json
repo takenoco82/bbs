@@ -42,7 +42,8 @@
             ],
             "jinja": true,
             "console": "internalConsole",
-            "cwd": "${workspaceFolder}/src"
+            "cwd": "${workspaceFolder}/src",
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }
