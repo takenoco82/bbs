@@ -8,7 +8,7 @@ services:
     #   dockerfile: ./.devcontainer/Dockerfile
     #   context: .
     volumes:
-      - .:/workspace
+      - .:/workspace:cached
       # ホストのホームディレクトリ
       - ~:/localhost_home:ro
       # Dokcerコンテナ内からDockerを使う Docker outside of Docker
