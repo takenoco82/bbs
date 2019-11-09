@@ -1,4 +1,4 @@
-from dateutil import tz
+from datetime import timezone
 
 from app.database import db
 
@@ -12,4 +12,4 @@ class AwareDateTime(db.TypeDecorator):
     impl = db.DateTime
 
     def process_result_value(self, value, dialect):
-        return value and value.replace(tzinfo=tz.UTC)
+        return value and value.replace(tzinfo=timezone.utc)
