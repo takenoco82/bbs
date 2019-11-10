@@ -33,7 +33,7 @@ class TestConfig:
 
 
 @pytest.mark.small
-class TestConfigMode:
+class TestConfigureApp:
     from app.config import ProductionConfig, DevelopmentConfig, TestingConfig
 
     @pytest.mark.parametrize(
@@ -56,6 +56,17 @@ class TestConfigMode:
             monkeypatch.delenv("BBS_APP_CONFIG", raising=False)
             config_obj = get_config_object()
             assert isinstance(config_obj, expected)
+
+    def test_configure_app(self):
+        from unittest.mock import patch, MagicMock
+        from app.config import configure_app
+
+        with patch("app.config.configure_logging") as patcher:
+            input = MagicMock()
+            configure_app(input)
+
+            input.config.from_object.assert_called_once()
+            patcher.assert_called_once()
 
 
 if __name__ == "__main__":
