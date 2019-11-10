@@ -34,7 +34,7 @@ class TestConfig:
 
 @pytest.mark.small
 class TestConfigMode:
-    from app.config import ProductionConfig, DevelopmentConfig, TestConfig
+    from app.config import ProductionConfig, DevelopmentConfig, TestingConfig
 
     @pytest.mark.parametrize(
         "input, expected",
@@ -42,7 +42,7 @@ class TestConfigMode:
             (None, ProductionConfig),
             ("production", ProductionConfig),
             ("development", DevelopmentConfig),
-            ("test", TestConfig),
+            ("test", TestingConfig),
         ],
     )
     def test_get_config_object(self, monkeypatch, input, expected):

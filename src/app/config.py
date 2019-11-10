@@ -8,7 +8,7 @@ from app.logging import configure_logging
 config_mode = {
     "production": "app.config.ProductionConfig",
     "development": "app.config.DevelopmentConfig",
-    "test": "app.config.TestConfig",
+    "test": "app.config.TestingConfig",
 }
 
 
@@ -43,7 +43,7 @@ class DevelopmentConfig(Config):
     TESTING = True
 
 
-class TestConfig(Config):
+class TestingConfig(Config):
     # Flask
     TESTING = True
 
