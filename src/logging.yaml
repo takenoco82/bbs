@@ -1,0 +1,42 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+  simple:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+handlers:
+  debug_file_handler:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: simple
+    filename: logs/debug.log
+    encoding: utf8
+  info_file_handler:
+    class: logging.FileHandler
+    level: INFO
+    formatter: simple
+    filename: logs/info.log
+    encoding: utf8
+  error_file_handler:
+    class: logging.FileHandler
+    level: ERROR
+    formatter: simple
+    filename: logs/error.log
+    encoding: utf8
+loggers:
+  app:
+    level: DEBUG
+    handlers:
+      - debug_file_handler
+      - info_file_handler
+      - error_file_handler
+    propagate: False
+  sqlalchemy.engine:
+    level: INFO
+    handlers:
+      - debug_file_handler
+    propagate: False
+root:
+  level: INFO
+  handlers:
+    - info_file_handler
+    - error_file_handler

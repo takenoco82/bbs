@@ -1,15 +1,16 @@
 from flask import Flask
 
+import app.models
+from app.api import configure_hooks, register_blueprint, register_error_handler
 from app.config import configure_app
 from app.database import init_db
-from app.api import register_blueprint, register_error_handler
-import app.models
 
 app = Flask(__name__)  # noqa
 configure_app(app)
 init_db(app)
 register_blueprint(app)
 register_error_handler(app)
+configure_hooks(app)
 
 
 if __name__ == "__main__":

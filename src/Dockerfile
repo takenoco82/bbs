@@ -26,6 +26,9 @@ RUN apk add --no-cache --virtual=uwsgi-deps \
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=production
 
+# create the directory to place logfile
+RUN mkdir -p ./logs
+
 # create the directory to place uwsgi pid file
 RUN mkdir -p /var/run/uwsgi
 
@@ -38,7 +41,7 @@ ENV BBS_APP_CONFIG=test
 RUN poetry install
 
 # copy production, migrations and test code
-COPY ./src/docker-entrypoint.sh ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
+COPY ./src/docker-entrypoint.sh ./src/logging.yaml ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
 COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 COPY ./src/tests ./tests
@@ -57,7 +60,7 @@ FROM base as production
 ENV BBS_APP_CONFIG=production
 
 # copy production and migrations code
-COPY ./src/docker-entrypoint.sh ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
+COPY ./src/docker-entrypoint.sh ./src/logging.yaml ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
 COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 
