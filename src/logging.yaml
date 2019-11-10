@@ -30,6 +30,11 @@ loggers:
       - info_file_handler
       - error_file_handler
     propagate: False
+  sqlalchemy.engine:
+    level: INFO
+    handlers:
+      - debug_file_handler
+    propagate: False
 root:
   level: INFO
   handlers:
