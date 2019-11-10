@@ -57,4 +57,4 @@ def configure_app(app):
     config_object = get_config_object()
     app.config.from_object(config_object)
 
-    configure_logging(app)
+    configure_logging(app, logging_config_file=f"{app.root_path}/logging.yaml")

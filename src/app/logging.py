@@ -21,12 +21,7 @@ class Logging:
         return {**basic_config, **custom_config}
 
 
-def get_logging_config_file(app):
-    return f"{app.root_path}/logging.yaml"
-
-
-def configure_logging(app):
-    logging_config_file = get_logging_config_file(app)
+def configure_logging(app, logging_config_file=None):
     logging_config = Logging(logging_config_file).config
 
     logging.config.dictConfig(logging_config)
