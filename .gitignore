@@ -5,6 +5,11 @@ __pycache__/
 *$py.class
 
 
+# Logging
+src/logs/*
+!src/logs/.gitkeep
+
+
 # Unit test / coverage reports
 .pytest_cache/
 

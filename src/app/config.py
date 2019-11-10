@@ -2,6 +2,8 @@ import os
 
 from werkzeug.utils import import_string
 
+from app.logging import configure_logging
+
 
 config_mode = {
     "production": "app.config.ProductionConfig",
@@ -37,16 +39,13 @@ class ProductionConfig(Config):
 
 
 class DevelopmentConfig(Config):
-    # SQLAlchemy
-    SQLALCHEMY_ECHO = True
+    # Flask
+    TESTING = True
 
 
 class TestConfig(Config):
     # Flask
     TESTING = True
-
-    # SQLAlchemy
-    SQLALCHEMY_ECHO = True
 
 
 def get_config_object():
@@ -57,3 +56,5 @@ def get_config_object():
 def configure_app(app):
     config_object = get_config_object()
     app.config.from_object(config_object)
+
+    configure_logging(app)
