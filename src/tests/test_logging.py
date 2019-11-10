@@ -18,7 +18,11 @@ class TestLogging:
             # logging_config_file なし
             (
                 # patches
-                [],
+                [
+                    # {"target": "app.logging.Path.exists", "return_value": True},
+                    # {"target": "builtins.open"},
+                    # {"target": "yaml.load", "return_value": {"root": {"level": "INFO"}}},
+                ],
                 # input
                 {"logging_config_file": None},
                 # expected
@@ -27,7 +31,11 @@ class TestLogging:
             # logging_config_file が存在しない
             (
                 # patches
-                [],
+                [
+                    {"target": "app.logging.Path.exists", "return_value": False},
+                    # {"target": "builtins.open"},
+                    # {"target": "yaml.load", "return_value": {"root": {"level": "INFO"}}},
+                ],
                 # input
                 {"logging_config_file": "/path/to/logging.yaml"},
                 # expected
@@ -37,11 +45,12 @@ class TestLogging:
             (
                 # patches
                 [
+                    {"target": "app.logging.Path.exists", "return_value": True},
                     {"target": "builtins.open"},
                     {"target": "yaml.load", "return_value": {"root": {"level": "INFO"}}},
                 ],
                 # input
-                {"logging_config_file": "/workspace/src/logging.yaml"},
+                {"logging_config_file": "/path/to/logging.yaml"},
                 # expected
                 {"version": 1, "disable_existing_loggers": False, "root": {"level": "INFO"}},
             ),
