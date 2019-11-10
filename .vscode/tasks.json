@@ -3,6 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // python
         {
             "label": "python",
             "type": "shell",
@@ -23,6 +24,7 @@
                 }
             },
         },
+        // test
         {
             "label": "test",
             "type": "shell",
@@ -43,6 +45,49 @@
                 }
             },
         },
+        // test: small
+        {
+            "label": "test: small",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/pytest -m small ./tests",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}/src"
+                }
+            },
+        },
+        // test: matched
+        {
+            "label": "test: matched",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/pytest -k ${input:prompt} ${file}",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}/src"
+                }
+            },
+        },
+        // lint
         {
             "label": "lint",
             "type": "shell",
@@ -60,6 +105,7 @@
                 "cwd": "${workspaceFolder}/src"
             }
         },
+        // format
         {
             "label": "format",
             "type": "shell",
@@ -76,6 +122,14 @@
             "options": {
                 "cwd": "${workspaceFolder}/src"
             }
+        }
+    ],
+    "inputs": [
+        // prompt
+        {
+            "id": "prompt",
+            "type": "promptString",
+            "description": "input regular expression ..."
         }
     ]
 }
