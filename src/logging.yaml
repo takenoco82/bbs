@@ -1,25 +1,34 @@
 version: 1
 disable_existing_loggers: False
 formatters:
-  simple:
-    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  simple_formatter:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(request_id)s - %(message)s"
+filters:
+  request_context_filter:
+    (): app.logging.RequestContextFilter
 handlers:
   debug_file_handler:
     class: logging.FileHandler
     level: DEBUG
-    formatter: simple
+    filters:
+      - request_context_filter
+    formatter: simple_formatter
     filename: logs/debug.log
     encoding: utf8
   info_file_handler:
     class: logging.FileHandler
     level: INFO
-    formatter: simple
+    filters:
+      - request_context_filter
+    formatter: simple_formatter
     filename: logs/info.log
     encoding: utf8
   error_file_handler:
     class: logging.FileHandler
     level: ERROR
-    formatter: simple
+    filters:
+      - request_context_filter
+    formatter: simple_formatter
     filename: logs/error.log
     encoding: utf8
 loggers:

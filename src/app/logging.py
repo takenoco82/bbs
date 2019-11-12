@@ -3,6 +3,21 @@ import logging.config
 from pathlib import Path
 
 import yaml
+from flask import g
+
+
+class RequestContextFilter(logging.Filter):
+    """ログにリクエストコンテキストを付与するFilter
+
+    See:
+        https://docs.python.org/ja/3/howto/logging-cookbook.html#filters-contextual
+        https://docs.python.org/ja/3/howto/logging-cookbook.html#configuring-filters-with-dictconfig
+    """
+
+    def filter(self, record):
+
+        record.request_id = g.request_id
+        return True
 
 
 class Logging:

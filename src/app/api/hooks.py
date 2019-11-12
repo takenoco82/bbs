@@ -39,6 +39,8 @@ class AfterRequestLog:
 
 
 def before_request_handlers():
+    g.request_id = request.headers.get("X-Request-Id", "")
+
     g.started_at = time.time()
     message = BeforeRequestLog(request).message
     logger.info(message)
