@@ -6,3 +6,5 @@ services:
       target: production
       context: .
       dockerfile: ./src/Dockerfile
+    volumes:
+      - ./src/logs:/bbs/logs:cached
