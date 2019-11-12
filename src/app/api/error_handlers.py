@@ -26,6 +26,20 @@ def validation_error_handler(error):
     return (jsonify(responseBody), 400)
 
 
+def not_found_error_handler(error):
+    errors = []
+    errors.append(
+        {
+            "field": None,
+            # TODO 後で対応する
+            "code": None,
+            "message": "Not Found.",
+        }
+    )
+    responseBody = {"errors": ErrorSchema(many=True).dump(errors)}
+    return (jsonify(responseBody), 404)
+
+
 def application_error_handler(error):
     # stacktrace も出力する
     logger.exception(error)
