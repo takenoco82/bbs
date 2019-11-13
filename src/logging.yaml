@@ -35,6 +35,17 @@ handlers:
     maxBytes: 1073741824
     backupCount: 1
     encoding: utf8
+  # INFO は不要だけど WARNING は必要なときに使う
+  warning_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: WARNING
+    filters:
+      - request_context_filter
+    formatter: simple_formatter
+    filename: logs/info.log
+    maxBytes: 1073741824
+    backupCount: 1
+    encoding: utf8
   error_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: ERROR
@@ -49,6 +60,7 @@ loggers:
   app:
     level: DEBUG
     handlers:
+      # 開発時には WARNING 以上のログをすぐに見られるようにしたいのでコンソール出力する
       - console_handler
       - debug_file_handler
       - info_file_handler
@@ -59,10 +71,12 @@ loggers:
     level: INFO
     handlers:
       - debug_file_handler
-    propagate: False
+    # WARNING 以上のログは rootロガーでハンドリングするため propagate: True にする
+    propagate: True
+# rootロガーは WARNING 以上をハンドリングする
 root:
   level: WARNING
   handlers:
     - console_handler
-    - info_file_handler
+    - warning_file_handler
     - error_file_handler
