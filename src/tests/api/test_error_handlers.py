@@ -13,8 +13,9 @@ class SampleSchema(Schema):
 
 @pytest.mark.small
 class TestErrorHandlers:
+    @patch("app.api.error_handlers.logger")
     @patch("app.api.error_handlers.jsonify")
-    def test_validation_error_handler(self, patcher):
+    def test_validation_error_handler(self, patcher1, patcher2):
         expetcted = {
             "status_code": 400,
             "body": {
@@ -28,7 +29,7 @@ class TestErrorHandlers:
                         "field": "field2",
                         "code": None,
                         "message": "Missing data for required field.",
-                    }
+                    },
                 ]
             },
         }
@@ -39,5 +40,5 @@ class TestErrorHandlers:
 
         actual = error_handlers.validation_error_handler(e.value)
         assert actual[1] == expetcted["status_code"]
-        patcher.assert_called_once()
-        patcher.assert_called_with(expetcted["body"])
+        patcher1.assert_called_once()
+        patcher1.assert_called_with(expetcted["body"])
