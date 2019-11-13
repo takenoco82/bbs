@@ -7,6 +7,13 @@ filters:
   request_context_filter:
     (): app.logging.RequestContextFilter
 handlers:
+  console_handler:
+    class: logging.StreamHandler
+    level: WARNING
+    filters:
+      - request_context_filter
+    formatter: simple_formatter
+    stream: ext://sys.stdout
   debug_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: DEBUG
@@ -42,9 +49,11 @@ loggers:
   app:
     level: DEBUG
     handlers:
+      - console_handler
       - debug_file_handler
       - info_file_handler
       - error_file_handler
+    # rootロガー でも同じハンドラーを設定しているため propagate: False にしないと、同じログが2回出力される
     propagate: False
   sqlalchemy.engine:
     level: INFO
@@ -52,7 +61,8 @@ loggers:
       - debug_file_handler
     propagate: False
 root:
-  level: INFO
+  level: WARNING
   handlers:
+    - console_handler
     - info_file_handler
     - error_file_handler
