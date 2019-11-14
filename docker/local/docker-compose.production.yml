@@ -7,4 +7,4 @@ services:
       context: .
       dockerfile: ./src/Dockerfile
     volumes:
-      - ./src/logs:/bbs/logs:cached
+      - ./log:/var/log/bbs:cached

@@ -6,8 +6,8 @@ __pycache__/
 
 
 # Logging
-src/logs/*
-!src/logs/.gitkeep
+log/*
+!log/.gitkeep
 
 
 # Unit test / coverage reports

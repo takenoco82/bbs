@@ -20,7 +20,7 @@ handlers:
     filters:
       - request_context_filter
     formatter: simple_formatter
-    filename: logs/debug.log
+    filename: /var/log/bbs/debug.log
     # 1MB (1024 * 1024 * 1024) でロールオーバし、1ファイルだけバックアップする
     maxBytes: 1073741824
     backupCount: 1
@@ -31,7 +31,7 @@ handlers:
     filters:
       - request_context_filter
     formatter: simple_formatter
-    filename: logs/info.log
+    filename: /var/log/bbs/info.log
     maxBytes: 1073741824
     backupCount: 1
     encoding: utf8
@@ -42,7 +42,7 @@ handlers:
     filters:
       - request_context_filter
     formatter: simple_formatter
-    filename: logs/info.log
+    filename: /var/log/bbs/info.log
     maxBytes: 1073741824
     backupCount: 1
     encoding: utf8
@@ -52,7 +52,7 @@ handlers:
     filters:
       - request_context_filter
     formatter: simple_formatter
-    filename: logs/error.log
+    filename: /var/log/bbs/error.log
     maxBytes: 1073741824
     backupCount: 1
     encoding: utf8
