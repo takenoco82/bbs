@@ -56,7 +56,7 @@ ENV BBS_APP_CONFIG=development
 # create the directory to place logfile and uwsgi pid file
 RUN mkdir -p \
     /var/log/bbs \
-    /var/run/uwsgi
+    /var/run/bbs
 
 # listen port
 EXPOSE 3031

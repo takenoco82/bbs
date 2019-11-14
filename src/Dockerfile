@@ -29,7 +29,7 @@ ENV FLASK_ENV=production
 # create the directory to place logfile and uwsgi pid file
 RUN mkdir -p \
     /var/log/bbs \
-    /var/run/uwsgi
+    /var/run/bbs
 
 
 FROM base as test
