@@ -53,8 +53,10 @@ ENV FLASK_APP=run.py
 ENV FLASK_ENV=development
 ENV BBS_APP_CONFIG=development
 
-# create the directory to place uwsgi pid file
-RUN mkdir -p /var/run/uwsgi
+# create the directory to place logfile and uwsgi pid file
+RUN mkdir -p \
+    /var/log/bbs \
+    /var/run/uwsgi
 
 # listen port
 EXPOSE 3031
