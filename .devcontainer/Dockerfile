@@ -8,6 +8,7 @@ RUN apk add --no-cache tzdata && \
 # install develop packages
 RUN apk add --no-cache --virtual=develop-deps \
         bash \
+        ctags \
         docker \
         git \
         jq \
@@ -15,16 +16,15 @@ RUN apk add --no-cache --virtual=develop-deps \
         make \
         openssh \
         vim \
-        zsh && \
-    # install mycli
-    apk add --no-cache --virtual=mycli-deps \
+        zsh
+# install mycli
+RUN apk add --no-cache --virtual=mycli-deps \
         gcc \
         libffi-dev \
         musl-dev \
         openssl-dev && \
     pip install --upgrade pip && \
     pip install --no-cache-dir mycli && \
-    apk del mycli-deps && \
     # install docker-compose
     #   https://wiki.alpinelinux.org/wiki/Docker#Docker_Compose
     apk add --no-cache --virtual=docker-compose-deps \
@@ -34,7 +34,7 @@ RUN apk add --no-cache --virtual=develop-deps \
         gcc \
         libc-dev && \
     pip install --no-cache-dir docker-compose && \
-    apk del docker-compose-deps
+    apk del mycli-deps docker-compose-deps
 
 # install starship
 RUN wget https://github.com/starship/starship/releases/download/v0.22.0/starship-x86_64-unknown-linux-musl.tar.gz && \

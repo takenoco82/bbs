@@ -25,3 +25,7 @@ src/logs/*
 # devcontainer
 .zshrc
 .myclirc
+
+
+# ctags
+.vscode/tags
