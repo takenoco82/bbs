@@ -1,3 +1,6 @@
+from dataclasses import dataclass, field
+from typing import List
+
 import yaml
 
 
@@ -43,24 +46,14 @@ class OpenApiSpec:
         return value in ["get", "put", "post", "delete", "options", "head", "patch", "trace"]
 
 
-# TODO data_class？で書き換える
 # エンドポイントに対応
+@dataclass
 class Operation:
-    def __init__(self, operation_id, path, method, media_types):
-        self.operation_id = operation_id
-        self.path = path
-        self.method = method
-        # リクエストボディのContent-Typeのリスト
-        self.media_types = media_types
-
-    def __repr__(self):
-        return (
-            f"Operation("
-            f"operation_id={self.operation_id!r}, "
-            f"path={self.path!r}, "
-            f"method={self.method!r}, "
-            f"media_types={self.media_types!r})"
-        )
+    operation_id: str
+    path: str
+    method: str
+    # リクエストボディのContent-Typeのリスト
+    media_types: List[str] = field(default_factory=list)
 
 
 if __name__ == "__main__":
