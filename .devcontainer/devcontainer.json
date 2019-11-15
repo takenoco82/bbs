@@ -13,6 +13,7 @@
     "extensions": [
         // "arjun.swagger-viewer",
         // "berublan.vscode-log-viewer",
+        "dbankier.vscode-quick-select",
         // "donjayamanne.githistory",
         "eamodio.gitlens",
         // "gruntfuggly.todo-tree",
