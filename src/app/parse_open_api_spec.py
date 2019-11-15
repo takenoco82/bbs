@@ -55,6 +55,9 @@ class Operation:
     # リクエストボディのContent-Typeのリスト
     media_types: List[str] = field(default_factory=list)
 
+    def is_supported_media_type(self, media_type):
+        return media_type in self.media_types
+
 
 if __name__ == "__main__":
     open_api_spec_file = "/workspace/docs/swagger_spec.yaml"
