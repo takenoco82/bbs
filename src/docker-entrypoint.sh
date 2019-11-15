@@ -69,7 +69,7 @@ function main() {
   case $1 in
     run)
       info "application start"
-      uwsgi --ini uwsgi.ini
+      uwsgi --ini ${SCRIPT_DIR}/.settings/uwsgi.ini
       ;;
     dev)
       info "develop server start"

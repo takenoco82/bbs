@@ -40,7 +40,8 @@ ENV BBS_APP_CONFIG=test
 RUN poetry install
 
 # copy production, migrations and test code
-COPY ./src/docker-entrypoint.sh ./src/logging.yaml ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
+COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
+COPY ./src/.settings ./.settings
 COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 COPY ./src/tests ./tests
@@ -59,7 +60,8 @@ FROM base as production
 ENV BBS_APP_CONFIG=production
 
 # copy production and migrations code
-COPY ./src/docker-entrypoint.sh ./src/logging.yaml ./src/run.py ./src/uwsgi.ini ./setup.cfg ./
+COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
+COPY ./src/.settings ./.settings
 COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 
