@@ -25,6 +25,7 @@ log/*
 # devcontainer
 .devcontainer/dotfiles
 !.devcontainer/dotfiles/*.sample
+.devcontainer/user-settings.sh
 
 
 # ctags
