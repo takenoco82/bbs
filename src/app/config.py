@@ -2,7 +2,6 @@ import os
 
 from werkzeug.utils import import_string
 
-from app.logging_config import configure_logging
 from app.open_api_spec import load_open_api_spec
 
 
@@ -58,9 +57,6 @@ def init_app_config(app):
     config_object = get_config_object()
     app.config.from_object(config_object)
 
-    configure_logging(
-        app, logging_config_file=f"{app.root_path}/.settings/logging.yaml"
-    )
     load_open_api_spec(
         open_api_spec_file=f"{app.root_path}/.settings/swagger_spec.yaml"
     )

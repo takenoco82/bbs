@@ -68,7 +68,6 @@ def test_get_config_object(monkeypatch, input, expected):
 @pytest.mark.small
 def test_init_app_config():
     patches = [
-        {"target": "app.config.configure_logging"},
         {"target": "app.config.load_open_api_spec"},
     ]
     with ExitStack() as stack:
@@ -82,14 +81,9 @@ def test_init_app_config():
 
         # app.config.from_object() の呼び出しの確認
         input.config.from_object.assert_called_once()
-        # app.logging_config.configure_logging() の呼び出しの確認
+        # app.open_api_spec.load_open_api_spec() の呼び出しの確認
         patchers[0].assert_called_once()
         patchers[0].assert_called_with(
-            input, logging_config_file="/path/to/.settings/logging.yaml"
-        )
-        # app.open_api_spec.load_open_api_spec() の呼び出しの確認
-        patchers[1].assert_called_once()
-        patchers[1].assert_called_with(
             open_api_spec_file="/path/to/.settings/swagger_spec.yaml"
         )
 
