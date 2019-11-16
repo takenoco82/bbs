@@ -1,8 +1,9 @@
 from flask import Flask
 
 import app.models
-from app.api import configure_hooks, register_blueprint
+from app.api import register_blueprint
 from app.api.error_handlers import register_error_handler
+from app.api.hooks import configure_hooks
 from app.config import configure_app
 from app.database import init_db
 

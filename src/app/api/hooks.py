@@ -65,3 +65,10 @@ def teardown_request_handlers(response):
 
 def teardown_appcontext_handlers(response):
     return response
+
+
+def configure_hooks(app):
+    app.before_request(before_request_handlers)
+    app.after_request(after_request_handlers)
+    app.teardown_request(teardown_request_handlers)
+    app.teardown_appcontext(teardown_appcontext_handlers)
