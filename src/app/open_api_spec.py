@@ -17,35 +17,36 @@ class OpenApiSpec:
     _instance = None
     _lock = threading.Lock()
 
-    # OpenAPI Spec を読み込んで、Operationオブジェクトに変換する
-    @classmethod
-    def from_yaml(cls, file_path):
-        logging.info(f"Getting spec from {file_path}")
-        with open(file_path, "r") as f:
-            spec = yaml.load(f, yaml.SafeLoader)
-        return OpenApiSpec(file_path, spec["openapi"], spec["info"], spec["paths"])
-
-    def __new__(cls, file_path=None, openapi=None, info=None, paths=None):
+    def __new__(cls):
         with cls._lock:
             if cls._instance is None:
                 cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, file_path=None, openapi=None, info=None, paths=None):
-        self.file_path = file_path
-        self.openapi = openapi
-        self.info = info
-        self.paths = paths
+    def __init__(self):
+        self.file_path = None
+        self.openapi = {}
+        self.info = {}
+        self.paths = {}
         # key: operation_id, value: Operation のディクショナリ
-        self.operations = self._paths_to_operations()
+        self.operations = {}
 
-    def _paths_to_operations(self):
+    # OpenAPI Spec を読み込んで、Operationオブジェクトに変換する
+    def from_yaml(self, file_path):
+        logging.info(f"Getting spec from {file_path}")
+        with open(file_path, "r") as f:
+            spec = yaml.load(f, yaml.SafeLoader)
+
+        self.file_path = file_path
+        self.openapi = spec["openapi"]
+        self.info = spec["info"]
+        self.paths = spec["paths"]
+        self.operations = self._paths_to_operations(self.paths)
+
+    def _paths_to_operations(self, paths):
         operations = {}
 
-        if self.paths is None:
-            return operations
-
-        for path, path_item in self.paths.items():
+        for path, path_item in paths.items():
             for method, operation_item in path_item.items():
                 if not self.is_method(method):
                     continue
@@ -58,16 +59,25 @@ class OpenApiSpec:
                 )
 
                 operations[operation_id] = Operation(
-                    operation_id=operation_id, path=path, method=method, media_types=media_types
+                    operation_id=operation_id,
+                    path=path,
+                    method=method,
+                    media_types=media_types,
                 )
         return operations
 
     @classmethod
     def is_method(cls, value):
-        return value in ["get", "put", "post", "delete", "options", "head", "patch", "trace"]
-
-    def has_operation(self, operation_id):
-        return operation_id in self.operations
+        return value in [
+            "get",
+            "put",
+            "post",
+            "delete",
+            "options",
+            "head",
+            "patch",
+            "trace",
+        ]
 
     def get_operation(self, operation_id):
         return self.operations.get(operation_id)
@@ -114,5 +124,6 @@ def get_operation(operation_id):
     raise ValueError(f"Operation '{operation_id}' not found.")
 
 
-def load_open_api_spec(open_api_spec_file):
-    OpenApiSpec.from_yaml(file_path=open_api_spec_file)
+def load_open_api_spec(app):
+    open_api_spec = OpenApiSpec()
+    open_api_spec.from_yaml(file_path=f"{app.root_path}/.settings/swagger_spec.yaml")

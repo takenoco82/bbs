@@ -1,5 +1,4 @@
-from unittest.mock import MagicMock, patch
-from contextlib import ExitStack
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -67,25 +66,14 @@ def test_get_config_object(monkeypatch, input, expected):
 
 @pytest.mark.small
 def test_init_app_config():
-    patches = [
-        {"target": "app.config.load_open_api_spec"},
-    ]
-    with ExitStack() as stack:
-        patchers = [stack.enter_context(patch(**item)) for item in patches]
+    # app(Flaskインスタンス)のモック
+    input = MagicMock()
+    input.root_path = "/path/to"
 
-        # app(Flaskインスタンス)のモック
-        input = MagicMock()
-        input.root_path = "/path/to"
+    init_app_config(input)
 
-        init_app_config(input)
-
-        # app.config.from_object() の呼び出しの確認
-        input.config.from_object.assert_called_once()
-        # app.open_api_spec.load_open_api_spec() の呼び出しの確認
-        patchers[0].assert_called_once()
-        patchers[0].assert_called_with(
-            open_api_spec_file="/path/to/.settings/swagger_spec.yaml"
-        )
+    # app.config.from_object() の呼び出しの確認
+    input.config.from_object.assert_called_once()
 
 
 if __name__ == "__main__":
