@@ -22,7 +22,8 @@ done
 
 # dotfiles
 find ${SCRIPT_DIR}/dotfiles -type f | grep -v sample | while read file; do
-  cp $file ~/
+  filename=$(basename $file)
+  ln -s -f $file ~/${filename}
 done
 
 # configure your custom settings

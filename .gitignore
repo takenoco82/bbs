@@ -23,8 +23,8 @@ log/*
 
 
 # devcontainer
-.zshrc
-.myclirc
+.devcontainer/dotfiles
+!.devcontainer/dotfiles/*.sample
 
 
 # ctags
