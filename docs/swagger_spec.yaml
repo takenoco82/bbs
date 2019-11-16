@@ -111,11 +111,17 @@ components:
           type: string
         field:
           type: string
-        message:
+        description:
           type: string
     Errors:
       type: object
       properties:
+        request_id:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
         errors:
           type: array
           items:
@@ -186,7 +192,10 @@ components:
   responses:
     Forbidden:
       description: Forbidden
-      content: {}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
     BadRequest:
       description: Bad Request
       content:
@@ -204,7 +213,10 @@ components:
       content: {}
     NotFound:
       description: Not Found
-      content: {}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
     Thread:
       description: OK
       content:
@@ -213,7 +225,13 @@ components:
             $ref: '#/components/schemas/Thread'
     Unauthorized:
       description: Unauthorized
-      content: {}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
     UnsupportedMediaType:
       description: Unsupported Media Type
-      content: {}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
