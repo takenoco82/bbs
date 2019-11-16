@@ -3,8 +3,7 @@ import time
 
 from flask import request, g
 
-from app.exceptions import HttpUnsupportedMediaTypeError
-
+from app.open_api_spec import get_operation
 
 logger = logging.getLogger(__name__)
 
@@ -48,8 +47,10 @@ def before_request_handlers():
     logger.info(message)
 
     content_type = request.headers.get("Content-Type")
-    if content_type and content_type != "application/json":
-        raise HttpUnsupportedMediaTypeError(f"Content type '{content_type}' not supported.")
+    operation_id = request.blueprint
+    if operation_id:
+        operation = get_operation(operation_id)
+        operation.validate_media_type(content_type)
 
 
 def after_request_handlers(response):

@@ -5,6 +5,8 @@ from typing import List
 
 import yaml
 
+from app.exceptions import HttpUnsupportedMediaTypeError
+
 logger = logging.getLogger(__name__)
 
 
@@ -80,7 +82,25 @@ class Operation:
     # リクエストボディのContent-Typeのリスト
     media_types: List[str] = field(default_factory=list)
 
-    def is_supported_media_type(self, media_type):
+    def validate_media_type(self, media_type):
+        # Content-Typeが不要なら、指定されていても無視する
+        if not self._is_media_type_required():
+            return
+
+        if not media_type:
+            message = f"Content-type required."
+            logger.info(message)
+            raise HttpUnsupportedMediaTypeError(message)
+
+        if not self._is_supported_media_type(media_type):
+            message = f"Content-type '{media_type}' not supported."
+            logger.info(message)
+            raise HttpUnsupportedMediaTypeError(message)
+
+    def _is_media_type_required(self):
+        return bool(self.media_types)
+
+    def _is_supported_media_type(self, media_type):
         return media_type in self.media_types
 
 
@@ -92,3 +112,7 @@ def get_operation(operation_id):
     if operation:
         return operation
     raise ValueError(f"Operation '{operation_id}' not found.")
+
+
+def load_open_api_spec(open_api_spec_file):
+    OpenApiSpec.from_yaml(file_path=open_api_spec_file)
