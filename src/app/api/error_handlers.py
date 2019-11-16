@@ -4,13 +4,14 @@ from flask import jsonify, g
 from marshmallow import ValidationError
 from werkzeug.exceptions import NotFound
 
-from app.api.schemas import Errors, ErrorSchema, ErrorsSchema
+from app.api.schemas import ErrorInfo, Errors, ErrorsSchema
 from app.exceptions import HttpUnsupportedMediaTypeError
 
 
 logger = logging.getLogger(__name__)
 
 
+# 主に4xx系エラー (app.exceptions.HTTPError またはそれを継承したエラー) に対するハンドラー
 def http_error_handler(error):
     data = Errors(
         request_id=g.request_id, status=error.status, message=error.message, errors=error.errors
@@ -19,58 +20,57 @@ def http_error_handler(error):
     return (jsonify(response_body), error.status_code)
 
 
+# リクエストボディを検証した結果、NGだった場合のハンドラー
 def validation_error_handler(error):
-    logger.info("validation error")
+    from werkzeug.http import HTTP_STATUS_CODES
+
+    logger.info("Validation failed.")
 
     errors = []
     for field in sorted(error.messages.keys()):
         messages = error.messages[field]
         for message in messages:
-            errors.append(
-                {
-                    "field": field,
-                    # TODO 後で対応する
-                    "code": None,
-                    "message": message,
-                }
-            )
-    responseBody = {"errors": ErrorSchema(many=True).dump(errors)}
-    return (jsonify(responseBody), 400)
+            # TODO codeは後で対応する
+            errors.append(ErrorInfo(code=None, field=field, description=message))
 
+    status_code = 400
 
-def not_found_error_handler(error):
-    errors = []
-    errors.append(
-        {
-            "field": None,
-            # TODO 後で対応する
-            "code": None,
-            "message": "Not Found.",
-        }
+    data = Errors(
+        request_id=g.request_id,
+        status=HTTP_STATUS_CODES.get(status_code),
+        message="Validation failed.",
+        errors=errors,
     )
-    responseBody = {"errors": ErrorSchema(many=True).dump(errors)}
-    return (jsonify(responseBody), 404)
+    response_body = ErrorsSchema().dump(data)
+    return (jsonify(response_body), status_code)
 
 
+# Flaskのルーティングにマッチしなかった場合のハンドラー
+def not_found_handler(error):
+    data = Errors(request_id=g.request_id, status=error.name, message="Resource not found.")
+    response_body = ErrorsSchema().dump(data)
+    return (jsonify(response_body), error.code)
+
+
+# 実行時例外が発生した場合のハンドラー
 def application_error_handler(error):
+    from werkzeug.http import HTTP_STATUS_CODES
+
     # stacktrace も出力する
     logger.exception(error)
 
-    errors = []
-    errors.append(
-        {
-            "field": None,
-            # TODO 後で対応する
-            "code": None,
-            "message": "An unexpected error occurred",
-        }
+    status_code = 500
+    data = Errors(
+        request_id=g.request_id,
+        status=HTTP_STATUS_CODES.get(status_code),
+        message="An unexpected error occurred.",
     )
-    responseBody = {"errors": ErrorSchema(many=True).dump(errors)}
-    return (jsonify(responseBody), 500)
+    response_body = ErrorsSchema().dump(data)
+    return (jsonify(response_body), status_code)
 
 
 def register_error_handler(app):
     app.register_error_handler(HttpUnsupportedMediaTypeError, http_error_handler)
     app.register_error_handler(ValidationError, validation_error_handler)
-    app.register_error_handler(NotFound, not_found_error_handler)
+    app.register_error_handler(NotFound, not_found_handler)
     app.register_error_handler(Exception, application_error_handler)
