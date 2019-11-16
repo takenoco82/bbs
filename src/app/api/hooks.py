@@ -41,15 +41,15 @@ class AfterRequestLog:
 
 
 def before_request_handlers():
-    g.request_id = request.headers.get("X-Request-Id", "")
     g.started_at = time.time()
+    g.request_id = request.headers.get("X-Request-Id", "")
+
+    message = BeforeRequestLog(request).message
+    logger.info(message)
 
     content_type = request.headers.get("Content-Type")
     if content_type and content_type != "application/json":
         raise HttpUnsupportedMediaTypeError(f"Content type '{content_type}' not supported.")
-
-    message = BeforeRequestLog(request).message
-    logger.info(message)
 
 
 def after_request_handlers(response):
