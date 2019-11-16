@@ -2,7 +2,7 @@ import os
 
 from werkzeug.utils import import_string
 
-from app.logging import configure_logging
+from app.logging_config import configure_logging
 
 
 config_mode = {

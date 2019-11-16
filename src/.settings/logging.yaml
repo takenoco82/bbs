@@ -5,7 +5,7 @@ formatters:
     format: "%(asctime)s - %(name)s - %(levelname)s - %(request_id)s - %(message)s"
 filters:
   request_context_filter:
-    (): app.logging.RequestContextFilter
+    (): app.logging_config.RequestContextFilter
 handlers:
   console_handler:
     class: logging.StreamHandler
