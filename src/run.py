@@ -4,11 +4,11 @@ import app.models
 from app.api import register_blueprint
 from app.api.error_handlers import register_error_handler
 from app.api.hooks import configure_hooks
-from app.config import configure_app
+from app.config import init_app_config
 from app.database import init_db
 
 app = Flask(__name__)  # noqa
-configure_app(app)
+init_app_config(app)
 init_db(app)
 register_blueprint(app)
 register_error_handler(app)

@@ -1,5 +1,15 @@
+from unittest.mock import MagicMock, patch
+from contextlib import ExitStack
+
 import pytest
-from app.config import Config
+
+from app.config import (
+    Config,
+    DevelopmentConfig,
+    ProductionConfig,
+    TestingConfig,
+    init_app_config,
+)
 
 
 @pytest.mark.small
@@ -33,40 +43,55 @@ class TestConfig:
 
 
 @pytest.mark.small
-class TestConfigureApp:
-    from app.config import ProductionConfig, DevelopmentConfig, TestingConfig
+@pytest.mark.parametrize(
+    "input, expected",
+    [
+        (None, ProductionConfig),
+        ("production", ProductionConfig),
+        ("development", DevelopmentConfig),
+        ("test", TestingConfig),
+    ],
+)
+def test_get_config_object(monkeypatch, input, expected):
+    from app.config import get_config_object
 
-    @pytest.mark.parametrize(
-        "input, expected",
-        [
-            (None, ProductionConfig),
-            ("production", ProductionConfig),
-            ("development", DevelopmentConfig),
-            ("test", TestingConfig),
-        ],
-    )
-    def test_get_config_object(self, monkeypatch, input, expected):
-        from app.config import get_config_object
+    if input:
+        monkeypatch.setenv("BBS_APP_CONFIG", input)
+        config_obj = get_config_object()
+        assert isinstance(config_obj, expected)
+    else:
+        monkeypatch.delenv("BBS_APP_CONFIG", raising=False)
+        config_obj = get_config_object()
+        assert isinstance(config_obj, expected)
 
-        if input:
-            monkeypatch.setenv("BBS_APP_CONFIG", input)
-            config_obj = get_config_object()
-            assert isinstance(config_obj, expected)
-        else:
-            monkeypatch.delenv("BBS_APP_CONFIG", raising=False)
-            config_obj = get_config_object()
-            assert isinstance(config_obj, expected)
 
-    def test_configure_app(self):
-        from unittest.mock import patch, MagicMock
-        from app.config import configure_app
+@pytest.mark.small
+def test_init_app_config():
+    patches = [
+        {"target": "app.config.configure_logging"},
+        {"target": "app.config.load_open_api_spec"},
+    ]
+    with ExitStack() as stack:
+        patchers = [stack.enter_context(patch(**item)) for item in patches]
 
-        with patch("app.config.configure_logging") as patcher:
-            input = MagicMock()
-            configure_app(input)
+        # app(Flaskインスタンス)のモック
+        input = MagicMock()
+        input.root_path = "/path/to"
 
-            input.config.from_object.assert_called_once()
-            patcher.assert_called_once()
+        init_app_config(input)
+
+        # app.config.from_object() の呼び出しの確認
+        input.config.from_object.assert_called_once()
+        # app.logging_config.configure_logging() の呼び出しの確認
+        patchers[0].assert_called_once()
+        patchers[0].assert_called_with(
+            input, logging_config_file="/path/to/.settings/logging.yaml"
+        )
+        # app.open_api_spec.load_open_api_spec() の呼び出しの確認
+        patchers[1].assert_called_once()
+        patchers[1].assert_called_with(
+            open_api_spec_file="/path/to/.settings/swagger_spec.yaml"
+        )
 
 
 if __name__ == "__main__":
