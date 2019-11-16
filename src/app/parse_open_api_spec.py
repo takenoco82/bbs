@@ -45,6 +45,12 @@ class OpenApiSpec:
     def is_method(cls, value):
         return value in ["get", "put", "post", "delete", "options", "head", "patch", "trace"]
 
+    def has_operation(self, operation_id):
+        return operation_id in self.operations
+
+    def get_operation(self, operation_id):
+        return self.operations.get(operation_id)
+
 
 # エンドポイントに対応
 @dataclass
