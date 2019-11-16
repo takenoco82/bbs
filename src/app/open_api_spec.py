@@ -1,19 +1,35 @@
+import logging
+import threading
 from dataclasses import dataclass, field
 from typing import List
 
 import yaml
 
+logger = logging.getLogger(__name__)
+
 
 # OpenAPI Spec のディクショナリを受け取って、Operationsのコレクションに変換する
 class OpenApiSpec:
+    # pythonで良い感じのシングルトンを書く - BlankTar
+    #   https://blanktar.jp/blog/2016/07/python-singleton.html
+    _instance = None
+    _lock = threading.Lock()
+
     # OpenAPI Spec を読み込んで、Operationオブジェクトに変換する
     @classmethod
-    def load(cls, file_path):
+    def from_yaml(cls, file_path):
+        logging.info(f"Getting spec from {file_path}")
         with open(file_path, "r") as f:
             spec = yaml.load(f, yaml.SafeLoader)
         return OpenApiSpec(file_path, spec["openapi"], spec["info"], spec["paths"])
 
-    def __init__(self, file_path, openapi, info, paths):
+    def __new__(cls, file_path=None, openapi=None, info=None, paths=None):
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self, file_path=None, openapi=None, info=None, paths=None):
         self.file_path = file_path
         self.openapi = openapi
         self.info = info
@@ -23,6 +39,9 @@ class OpenApiSpec:
 
     def _paths_to_operations(self):
         operations = {}
+
+        if self.paths is None:
+            return operations
 
         for path, path_item in self.paths.items():
             for method, operation_item in path_item.items():
@@ -65,7 +84,11 @@ class Operation:
         return media_type in self.media_types
 
 
-if __name__ == "__main__":
-    open_api_spec_file = "/workspace/docs/swagger_spec.yaml"
-    open_api_spec = OpenApiSpec.load(open_api_spec_file)
-    print(open_api_spec.operations)
+_open_api_spec_instance = OpenApiSpec()
+
+
+def get_operation(operation_id):
+    operation = _open_api_spec_instance.get_operation(operation_id)
+    if operation:
+        return operation
+    raise ValueError(f"Operation '{operation_id}' not found.")
