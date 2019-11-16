@@ -13,13 +13,6 @@ cp -r ${LOCALHOST_HOME}/.ssh/* ~/.ssh
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/*
 
-# copy git config into container works
-find ${LOCALHOST_HOME} -maxdepth 1 -type f -name ".git*" | while read file; do
-  cp $file ~/
-  # filename=$(basename $file)
-  # ln -s -f $file ~/${filename}
-done
-
 # dotfiles
 find ${SCRIPT_DIR}/dotfiles -type f | grep -v sample | while read file; do
   filename=$(basename $file)
