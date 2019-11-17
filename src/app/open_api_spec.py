@@ -25,7 +25,7 @@ class OpenApiSpec:
 
     def __init__(self):
         self.file_path = None
-        self.openapi = {}
+        self.openapi = None
         self.info = {}
         self.paths = {}
         # key: operation_id, value: Operation のディクショナリ
@@ -33,7 +33,7 @@ class OpenApiSpec:
 
     # OpenAPI Spec を読み込んで、Operationオブジェクトに変換する
     def from_yaml(self, file_path):
-        logging.info(f"Getting spec from {file_path}")
+        logger.info(f"Getting spec from {file_path}")
         with open(file_path, "r") as f:
             spec = yaml.load(f, yaml.SafeLoader)
 
@@ -53,7 +53,7 @@ class OpenApiSpec:
 
                 operation_id = operation_item["operationId"]
                 media_types = (
-                    operation_item["requestBody"]["content"].keys()
+                    list(operation_item["requestBody"]["content"].keys())
                     if "requestBody" in operation_item.keys()
                     else []
                 )
@@ -86,9 +86,9 @@ class OpenApiSpec:
 # エンドポイントに対応
 @dataclass
 class Operation:
-    operation_id: str
-    path: str
-    method: str
+    operation_id: str = None
+    path: str = None
+    method: str = None
     # リクエストボディのContent-Typeのリスト
     media_types: List[str] = field(default_factory=list)
 
