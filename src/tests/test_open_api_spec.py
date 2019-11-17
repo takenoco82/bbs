@@ -1,13 +1,31 @@
-import pytest
-from unittest.mock import patch, MagicMock
+import copy
 from contextlib import ExitStack
+from unittest.mock import MagicMock, patch
 
-from app.open_api_spec import OpenApiSpec, Operation, get_operation, load_open_api_spec
+import pytest
+
 from app.exceptions import HttpUnsupportedMediaTypeError
+from app.open_api_spec import (
+    OpenApiSpec,
+    Operation,
+    _open_api_spec_instance,
+    get_operation,
+    load_open_api_spec,
+)
 
 
 @pytest.mark.small
 class TestOpenApiSpec:
+    # テスト中に _open_api_spec_instance が書き換えられて、
+    # 全体テストを実行するとAPIのテストでNGになる(Content-Typeチェックでエラーになる)ので、もとに戻す
+    def setup_method(self, method):
+        self.open_api_spec_instance = copy.copy(_open_api_spec_instance.__dict__)
+
+    def teardown_method(self, method):
+        for key, value in self.open_api_spec_instance.items():
+            print(key, value)
+            setattr(_open_api_spec_instance, key, value)
+
     @pytest.mark.parametrize(
         "input, expected",
         [

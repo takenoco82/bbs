@@ -125,5 +125,6 @@ def get_operation(operation_id):
 
 
 def load_open_api_spec(app):
-    open_api_spec = OpenApiSpec()
-    open_api_spec.from_yaml(file_path=f"{app.root_path}/.settings/swagger_spec.yaml")
+    _open_api_spec_instance.from_yaml(
+        file_path=f"{app.root_path}/.settings/swagger_spec.yaml"
+    )
