@@ -13,6 +13,11 @@ cp -r ${LOCALHOST_HOME}/.ssh/* ~/.ssh
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/*
 
+# copy aws config into container works
+mkdir -p ~/.aws
+cp -r ${LOCALHOST_HOME}/.aws/* ~/.aws
+chmod 600 ~/.aws/*
+
 # dotfiles
 find ${SCRIPT_DIR}/dotfiles -type f | grep -v sample | while read file; do
   filename=$(basename $file)

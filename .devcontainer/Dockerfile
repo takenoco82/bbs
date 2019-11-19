@@ -17,13 +17,16 @@ RUN apk add --no-cache --virtual=develop-deps \
         openssh \
         vim \
         zsh
-# install mycli
-RUN apk add --no-cache --virtual=mycli-deps \
+# install awscli
+RUN apk add --no-cache --virtual=awscli-deps groff && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir awscli && \
+    # install mycli
+    apk add --no-cache --virtual=mycli-deps \
         gcc \
         libffi-dev \
         musl-dev \
         openssl-dev && \
-    pip install --upgrade pip && \
     pip install --no-cache-dir mycli && \
     # install docker-compose
     #   https://wiki.alpinelinux.org/wiki/Docker#Docker_Compose
