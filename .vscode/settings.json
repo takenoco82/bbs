@@ -1,4 +1,8 @@
 {
+    "editor.rulers": [
+        88,
+        100
+    ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

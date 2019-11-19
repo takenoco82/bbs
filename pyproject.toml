@@ -22,7 +22,6 @@ pytest = "^5.2"
 rope = "^0.14.0"
 freezegun = "^0.3.12"
 [tool.black]
-line-length = 100
 exclude = '''
 /(
     \.eggs |
