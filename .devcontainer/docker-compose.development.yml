@@ -1,6 +1,9 @@
 version: '3.7'
 
 services:
+  web:
+    ports:
+      - "80:80"
   ap:
     image: ${IMAGE_AP_REPOSITORY}:development
     # NOTE: 何故かビルドできない...
