@@ -30,3 +30,8 @@ log/*
 
 # ctags
 .vscode/tags
+
+# Terraform
+.terraform/
+backend.tfvars
+terraform.tfvars
