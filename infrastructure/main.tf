@@ -31,7 +31,11 @@ resource "aws_vpc" "main" {
   assign_generated_ipv6_cidr_block = false
 
   tags = {
-    Name = "${var.app_name}-${var.env}-vpc"
+    # 弊社で使っているAWSリソースの命名規則を紹介します ｜ Developers.IO
+    # https://dev.classmethod.jp/cloud/aws/aws-name-rule/
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-vpc"
   }
 }
 
@@ -41,7 +45,9 @@ resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
   tags = {
-    Name = "${var.app_name}-${var.env}-subnet-public"
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-subnet-public"
   }
 }
 
@@ -49,7 +55,9 @@ resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.2.0/24"
   tags = {
-    Name = "${var.app_name}-${var.env}-subnet-private"
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-subnet-private"
   }
 }
 
@@ -58,7 +66,9 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${var.app_name}-${var.env}-internet-gateway"
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-internet-gateway"
   }
 }
 
@@ -67,7 +77,9 @@ resource "aws_internet_gateway" "main" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${var.app_name}-${var.env}-route-table-public"
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-route-table-public"
   }
 }
 
@@ -93,7 +105,9 @@ resource "aws_security_group" "allow-ssh" {
   description = "Allow SSH inbound traffic"
   vpc_id      = aws_vpc.main.id
   tags = {
-    Name = "${var.app_name}-${var.env}-sg-allow-ssh"
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-sg-allow-ssh"
   }
 }
 
@@ -120,6 +134,8 @@ resource "aws_instance" "ap" {
   key_name                    = var.aws_instance_key_name
   associate_public_ip_address = true
   tags = {
-    Name = "${var.app_name}-${var.env}-instance-ap"
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-instance-ap"
   }
 }
