@@ -31,7 +31,7 @@ resource "aws_vpc" "main" {
   assign_generated_ipv6_cidr_block = false
 
   tags = {
-    Name = "bbs-dev-vpc"
+    Name = "${var.app_name}-${var.env}-vpc"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
   tags = {
-    Name = "bbs-dev-subnet-public"
+    Name = "${var.app_name}-${var.env}-subnet-public"
   }
 }
 
@@ -49,7 +49,7 @@ resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.2.0/24"
   tags = {
-    Name = "bbs-dev-subnet-private"
+    Name = "${var.app_name}-${var.env}-subnet-private"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "bbs-dev-internet-gateway"
+    Name = "${var.app_name}-${var.env}-internet-gateway"
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_internet_gateway" "main" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "bbs-dev-route-table-public"
+    Name = "${var.app_name}-${var.env}-route-table-public"
   }
 }
 
@@ -93,7 +93,7 @@ resource "aws_security_group" "allow-ssh" {
   description = "Allow SSH inbound traffic"
   vpc_id      = aws_vpc.main.id
   tags = {
-    Name = "bbs-dev-sg-allow-ssh"
+    Name = "${var.app_name}-${var.env}-sg-allow-ssh"
   }
 }
 
@@ -120,6 +120,6 @@ resource "aws_instance" "ap" {
   key_name                    = var.aws_instance_key_name
   associate_public_ip_address = true
   tags = {
-    Name = "bbs-dev-instance-ap"
+    Name = "${var.app_name}-${var.env}-instance-ap"
   }
 }
