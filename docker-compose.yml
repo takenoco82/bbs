@@ -37,8 +37,10 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Tokyo
     volumes:
       - ./config/mysql/conf.d:/etc/mysql/conf.d
+      - ./log:/var/log/mysql:cached
       - mysql-data:/var/lib/mysql
     logging:
       driver: "json-file"
