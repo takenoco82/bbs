@@ -40,6 +40,7 @@ services:
       TZ: Asia/Tokyo
     volumes:
       - ./config/mysql/conf.d:/etc/mysql/conf.d
+      - ./config/mysql/initdb.d:/docker-entrypoint-initdb.d
       - ./log:/var/log/mysql:cached
       - mysql-data:/var/lib/mysql
     logging:
