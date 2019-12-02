@@ -28,6 +28,11 @@
         "editor.formatOnSave": false,
         "editor.tabSize": 2
     },
+    "[terraform]": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
     // Extension settiong
     "autoDocstring.docstringFormat": "google",
     "python.formatting.provider": "black",
