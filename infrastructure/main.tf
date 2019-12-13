@@ -100,6 +100,17 @@ resource "aws_route_table_association" "public" {
 
 # Security group
 # https://www.terraform.io/docs/providers/aws/r/security_group.html
+resource "aws_security_group" "allow-all-in-sg" {
+  name        = "allow-all-in-sg"
+  description = "Allow all traffic with the same Security group"
+  vpc_id      = aws_vpc.main.id
+  tags = {
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-sg-allow-all-in-sg"
+  }
+}
+
 resource "aws_security_group" "allow-all-outbound" {
   name        = "allow-all-outbound"
   description = "Allow ALL outbound traffic"
@@ -124,6 +135,15 @@ resource "aws_security_group" "allow-ssh" {
 
 # Security group rule
 # https://www.terraform.io/docs/providers/aws/r/security_group_rule.html
+resource "aws_security_group_rule" "all-in-sg" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  self              = true
+  security_group_id = aws_security_group.allow-all-in-sg.id
+}
+
 resource "aws_security_group_rule" "outbound" {
   type              = "egress"
   from_port         = 0
@@ -152,6 +172,7 @@ resource "aws_instance" "ap" {
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [
+    aws_security_group.allow-all-in-sg.id,
     aws_security_group.allow-all-outbound.id,
     aws_security_group.allow-ssh.id
   ]
