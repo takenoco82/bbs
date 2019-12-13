@@ -168,10 +168,10 @@ resource "aws_security_group_rule" "ssh" {
 resource "aws_instance" "ap" {
   count = var.aws_instance_count_ap
   # aws ec2 describe-images --image-ids ami-0c3fd0f5d33134a76
-  ami                         = "ami-0c3fd0f5d33134a76"
-  instance_type               = "t2.micro"
-  subnet_id                   = aws_subnet.public.id
-  vpc_security_group_ids      = [
+  ami           = "ami-0c3fd0f5d33134a76"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public.id
+  vpc_security_group_ids = [
     aws_security_group.allow-all-in-sg.id,
     aws_security_group.allow-all-outbound.id,
     aws_security_group.allow-ssh.id
@@ -183,4 +183,15 @@ resource "aws_instance" "ap" {
     Env         = var.env
     Name        = "${var.app_name}-${var.env}-ap${count.index + 1}"
   }
+}
+
+# Route53 record
+# https://www.terraform.io/docs/providers/aws/r/route53_record.html
+resource "aws_route53_record" "instance-ap" {
+  count   = var.aws_instance_count_ap
+  zone_id = var.aws_public_host_zone_id
+  name    = "${element(aws_instance.ap.*.tags.Name, count.index)}.aws"
+  type    = "A"
+  ttl     = "300"
+  records = [element(aws_instance.ap.*.public_ip, count.index)]
 }
