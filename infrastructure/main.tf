@@ -185,6 +185,16 @@ resource "aws_instance" "ap" {
   }
 }
 
+# Route53 Hosted Zone
+# https://www.terraform.io/docs/providers/aws/r/route53_zone.html
+resource "aws_route53_zone" "private" {
+  name    = var.aws_private_host_zone_name
+  comment = "Private HostedZone created by Terraform."
+  vpc {
+    vpc_id = aws_vpc.main.id
+  }
+}
+
 # Route53 record
 # https://www.terraform.io/docs/providers/aws/r/route53_record.html
 resource "aws_route53_record" "instance-ap" {

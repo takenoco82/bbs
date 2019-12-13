@@ -12,6 +12,7 @@ variable "aws_instance_count_ap" {
   default = 1
 }
 variable "aws_instance_key_name" {}
+variable "aws_private_host_zone_name" {}
 variable "aws_public_host_zone_id" {}
 variable "aws_profile" {}
 variable "aws_region" {
