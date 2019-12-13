@@ -8,6 +8,9 @@ variable "app_name" {
 variable "env" {
   default = "dev"
 }
+variable "aws_instance_count_ap" {
+  default = 1
+}
 variable "aws_instance_key_name" {}
 variable "aws_profile" {}
 variable "aws_region" {

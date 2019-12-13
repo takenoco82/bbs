@@ -126,6 +126,7 @@ resource "aws_security_group_rule" "ssh" {
 # EC2 instance
 # https://www.terraform.io/docs/providers/aws/r/instance.html
 resource "aws_instance" "ap" {
+  count = var.aws_instance_count_ap
   # aws ec2 describe-images --image-ids ami-0c3fd0f5d33134a76
   ami                         = "ami-0c3fd0f5d33134a76"
   instance_type               = "t2.micro"
@@ -136,6 +137,6 @@ resource "aws_instance" "ap" {
   tags = {
     Application = var.app_name
     Env         = var.env
-    Name        = "${var.app_name}-${var.env}-instance-ap"
+    Name        = "${var.app_name}-${var.env}-ap${count.index + 1}"
   }
 }
