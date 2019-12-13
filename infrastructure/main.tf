@@ -100,6 +100,17 @@ resource "aws_route_table_association" "public" {
 
 # Security group
 # https://www.terraform.io/docs/providers/aws/r/security_group.html
+resource "aws_security_group" "allow-all-outbound" {
+  name        = "allow-all-outbound"
+  description = "Allow ALL outbound traffic"
+  vpc_id      = aws_vpc.main.id
+  tags = {
+    Application = var.app_name
+    Env         = var.env
+    Name        = "${var.app_name}-${var.env}-sg-allow-all-outbound"
+  }
+}
+
 resource "aws_security_group" "allow-ssh" {
   name        = "allow-ssh"
   description = "Allow SSH inbound traffic"
@@ -113,6 +124,15 @@ resource "aws_security_group" "allow-ssh" {
 
 # Security group rule
 # https://www.terraform.io/docs/providers/aws/r/security_group_rule.html
+resource "aws_security_group_rule" "outbound" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.allow-all-outbound.id
+}
+
 resource "aws_security_group_rule" "ssh" {
   type              = "ingress"
   from_port         = 22
@@ -131,7 +151,10 @@ resource "aws_instance" "ap" {
   ami                         = "ami-0c3fd0f5d33134a76"
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.public.id
-  vpc_security_group_ids      = [aws_security_group.allow-ssh.id]
+  vpc_security_group_ids      = [
+    aws_security_group.allow-all-outbound.id,
+    aws_security_group.allow-ssh.id
+  ]
   key_name                    = var.aws_instance_key_name
   associate_public_ip_address = true
   tags = {
