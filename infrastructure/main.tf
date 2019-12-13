@@ -205,3 +205,11 @@ resource "aws_route53_record" "instance-ap" {
   ttl     = "300"
   records = [element(aws_instance.ap.*.public_ip, count.index)]
 }
+resource "aws_route53_record" "instance-ap-private" {
+  count   = var.aws_instance_count_ap
+  zone_id = aws_route53_zone.private.zone_id
+  name    = "${element(aws_instance.ap.*.tags.Name, count.index)}.aws"
+  type    = "A"
+  ttl     = "300"
+  records = [element(aws_instance.ap.*.private_ip, count.index)]
+}
