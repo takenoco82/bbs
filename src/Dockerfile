@@ -18,7 +18,7 @@ RUN apk add --no-cache --virtual=uwsgi-deps \
     gcc \
     libc-dev \
     linux-headers && \
-    poetry config settings.virtualenvs.create false && \
+    poetry config virtualenvs.create false && \
     poetry install --no-dev && \
     apk del uwsgi-deps
 
@@ -37,7 +37,11 @@ FROM base as test
 ENV BBS_APP_CONFIG=test
 
 # install develop packages of python to system
-RUN poetry install
+RUN apk add --no-cache --virtual=regex-deps \
+    gcc \
+    libc-dev && \
+    poetry install && \
+    apk del regex-deps
 
 # copy production, migrations and test code
 COPY ./src/docker-entrypoint.sh ./src/run.py ./setup.cfg ./
