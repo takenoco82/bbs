@@ -77,6 +77,10 @@ RUN apk add --no-cache --virtual=uwsgi-deps \
     gcc \
     libc-dev \
     linux-headers
+
+# https://code.visualstudio.com/docs/remote/containers-advanced#_avoiding-extension-reinstalls-on-container-rebuild
+RUN mkdir -p $HOME/.vscode-server
+
 # NOTE: 結局マウントするけど、コピーしておかないと起動時にエラーになるのでコピーしておく
 COPY ./.devcontainer ./.devcontainer
 ENTRYPOINT [ "sh", "./.devcontainer/docker-entrypoint.sh" ]
