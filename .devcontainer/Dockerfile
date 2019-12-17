@@ -55,7 +55,7 @@ RUN wget https://github.com/starship/starship/releases/download/v0.22.0/starship
 RUN apk add --no-cache curl && \
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python && \
     ln -s -f $HOME/.poetry/bin/poetry /usr/local/bin/poetry && \
-    poetry config settings.virtualenvs.in-project true
+    poetry config virtualenvs.in-project true
 
 # application configure
 ENV FLASK_APP=run.py
