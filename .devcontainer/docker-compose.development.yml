@@ -6,10 +6,9 @@ services:
       - "80:80"
   ap:
     image: ${IMAGE_AP_REPOSITORY}:development
-    # NOTE: 何故かビルドできない...
-    # build:
-    #   dockerfile: ./.devcontainer/Dockerfile
-    #   context: .
+    build:
+      dockerfile: ./.devcontainer/Dockerfile
+      context: .
     volumes:
       - .:/workspace:cached
       # ログの永続化
@@ -19,7 +18,7 @@ services:
       # Dokcerコンテナ内からDockerを使う Docker outside of Docker
       - /var/run/docker.sock:/var/run/docker.sock
       # コンテナリビルド時に拡張機能の再インストールを避ける
-      - vscode-server:/root/.vscode-server:z
+      # - vscode-server:/root/.vscode-server:z
     command: /bin/sh -c "while sleep 1000; do :; done"
 
 volumes:
