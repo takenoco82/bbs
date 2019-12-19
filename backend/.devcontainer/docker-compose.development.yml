@@ -11,11 +11,9 @@ services:
       dockerfile: ./.devcontainer/Dockerfile
       context: .
     volumes:
-      # - ..:/workspace:cached
-      - ~/git/bbs:/workspace:cached
+      - ..:/workspace:cached
       # ログの永続化
-      # - ./log:/var/log/bbs:cached
-      - ~/git/bbs/backend/log:/var/log/bbs:cached
+      - ./log:/var/log/bbs:cached
       # ホストのホームディレクトリ
       - ~:/localhost_home:ro
       # Dokcerコンテナ内からDockerを使う Docker outside of Docker
