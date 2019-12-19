@@ -3,10 +3,10 @@ include .env
 $(eval PROJECT_DIR := $(shell git rev-parse --show-toplevel))
 $(eval PROJECT_DIR_NAME := $(shell basename ${PROJECT_DIR}))
 
-DEVCONTAINER_DIR = ${PROJECT_DIR}/.devcontainer
+DEVCONTAINER_DIR = ${PROJECT_DIR}/backend/.devcontainer
 
-DOCKER_COMPOSE_FILE = ${PROJECT_DIR}/docker-compose.yml
-DOCKER_COMPOSE_PRODUCTION_FILE = ${PROJECT_DIR}/docker/local/docker-compose.production.yml
+DOCKER_COMPOSE_FILE = ${PROJECT_DIR}/backend/docker-compose.yml
+DOCKER_COMPOSE_PRODUCTION_FILE = ${PROJECT_DIR}/backend/docker/local/docker-compose.production.yml
 
 # コマンドの一覧
 #   make だけで実行されたときに実行される
@@ -47,12 +47,12 @@ run: stop build
 test:
 	docker-compose \
 		-f ${DOCKER_COMPOSE_FILE} \
-		-f ${PROJECT_DIR}/docker/local/docker-compose.test.yml \
+		-f ${PROJECT_DIR}/backend/docker/local/docker-compose.test.yml \
 		-p ${PROJECT_DIR_NAME}_test \
 		up --build ap
 	docker-compose \
 		-f ${DOCKER_COMPOSE_FILE} \
-		-f ${PROJECT_DIR}/docker/local/docker-compose.test.yml \
+		-f ${PROJECT_DIR}/backend/docker/local/docker-compose.test.yml \
 		-p ${PROJECT_DIR_NAME}_test \
 		down -v
 

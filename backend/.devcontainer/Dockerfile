@@ -71,7 +71,7 @@ RUN mkdir -p \
 EXPOSE 3031
 
 # install default & develop packages of python to virtualenv
-WORKDIR /workspace
+WORKDIR /workspace/backend
 # poetry install で必要になるパッケージをインストールする
 RUN apk add --no-cache --virtual=uwsgi-deps \
     gcc \

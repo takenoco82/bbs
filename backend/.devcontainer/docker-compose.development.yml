@@ -3,16 +3,19 @@ version: '3.7'
 services:
   web:
     ports:
-      - "80:80"
+      - "80"
+      # - "80:80"
   ap:
     image: ${IMAGE_AP_REPOSITORY}:development
     build:
       dockerfile: ./.devcontainer/Dockerfile
       context: .
     volumes:
-      - .:/workspace:cached
+      # - ..:/workspace:cached
+      - ~/git/bbs:/workspace:cached
       # ログの永続化
-      - ./log:/var/log/bbs:cached
+      # - ./log:/var/log/bbs:cached
+      - ~/git/bbs/backend/log:/var/log/bbs:cached
       # ホストのホームディレクトリ
       - ~:/localhost_home:ro
       # Dokcerコンテナ内からDockerを使う Docker outside of Docker

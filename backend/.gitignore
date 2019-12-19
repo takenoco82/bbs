@@ -1,0 +1,27 @@
+# [gitignore/Python.gitignore at master · github/gitignore](https://github.com/github/gitignore/blob/master/Python.gitignore)
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logging
+log/*
+!log/.gitkeep
+
+# Unit test / coverage reports
+.pytest_cache/
+
+# Environments
+.venv
+
+# Rope project settings
+.ropeproject
+
+# devcontainer
+!.devcontainer/dotfiles
+.devcontainer/dotfiles/*
+!.devcontainer/dotfiles/*.sample
+.devcontainer/user-settings.sh
+
+# ctags
+.vscode/tags
