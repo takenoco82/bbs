@@ -30,7 +30,61 @@
     ],
     // Adds default settings.json values into a container/machine specific settings file.
     "settings": {
-        "terminal.integrated.shell.linux": "/bin/zsh"
+        "editor.rulers": [
+            88,
+            100
+        ],
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/__pycache__": true,
+            "**/.mypy_cache": true,
+            "**/.pytest_cache": true,
+            "**/.ropeproject": true
+        },
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "terminal.integrated.shell.linux": "/bin/zsh",
+        "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
+        // Language specific editor settings
+        "[python]": {
+            "editor.formatOnPaste": false,
+            "editor.formatOnSave": true,
+            "editor.tabSize": 4
+        },
+        "[shellscript]": {
+            "editor.formatOnPaste": false,
+            "editor.formatOnSave": false,
+            "editor.tabSize": 2
+        },
+        // Extension settiong
+        "autoDocstring.docstringFormat": "google",
+        "python.formatting.provider": "black",
+        "python.formatting.blackPath": "black",
+        "python.formatting.blackArgs": [
+            // "--line-length",
+            // "100"
+        ],
+        "python.linting.enabled": true,
+        "python.linting.flake8Path": "flake8",
+        "python.linting.flake8Enabled": true,
+        "python.linting.flake8Args": [
+            // "--config",
+            // "./setup.cfg"
+        ],
+        "python.pythonPath": ".venv/bin/python",
+        "python.autoComplete.extraPaths": [
+            // srcディレクトリ内のモジュールを補完できるようにする
+            "${workspaceFolder}/src"
+        ],
+        "python.testing.nosetestsEnabled": false,
+        "python.testing.pytestEnabled": false,
+        "python.testing.unittestEnabled": false,
+        "rest-client.decodeEscapedUnicodeCharacters": true,
+        "rest-client.previewOption": "exchange"
     },
     // A command string or list of command arguments to run after the container is created.
     // The commands execute from the workspaceFolder in the container.
