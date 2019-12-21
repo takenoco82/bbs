@@ -41,21 +41,6 @@ function error() {
   exit 1
 }
 
-# test functions
-function testing() {
-  local size="$1"
-  local directory="$2"
-  pytest -m $size $directory
-}
-function medium_test() {
-  info "medium test start"
-  testing medium $SCRIPT_DIR
-}
-function large_test() {
-  info "large test start"
-  testing large $SCRIPT_DIR
-}
-
 #
 # メイン処理
 #
@@ -71,6 +56,10 @@ function main() {
       info "application start"
       uwsgi --ini ${SCRIPT_DIR}/.settings/uwsgi.ini
       ;;
+    migrate)
+      info "DB migration start"
+      flask db upgrade
+      ;;
     dev)
       info "develop server start"
       # Quickstart — Flask Documentation (1.1.x) - Externally Visible Server
@@ -78,9 +67,12 @@ function main() {
       flask run --host 0.0.0.0 --port 5000
       ;;
     test)
-      # NOTE 今はまだないのでコメントアウトしておく
-      # medium_test
-      # large_test
+      # lint
+      info "lint start"
+      flake8
+      # test
+      info "small test start"
+      pytest -m small tests
       ;;
     help) usage; exit 0 ;;
     *) exec "$@" ;;

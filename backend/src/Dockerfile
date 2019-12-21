@@ -50,11 +50,6 @@ COPY ./src/app ./app
 COPY ./src/migrations ./migrations
 COPY ./src/tests ./tests
 
-# lint
-RUN [ "flake8" ]
-# small test
-RUN [ "pytest", "-m", "small", "tests" ]
-# run test
 ENTRYPOINT [ "sh", "./docker-entrypoint.sh"]
 CMD [ "test" ]
 

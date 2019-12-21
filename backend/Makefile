@@ -1,12 +1,12 @@
 include .env
 
 $(eval PROJECT_DIR := $(shell git rev-parse --show-toplevel))
-$(eval PROJECT_DIR_NAME := $(shell basename ${PROJECT_DIR}))
 
-DEVCONTAINER_DIR = ${PROJECT_DIR}/backend/.devcontainer
+WORKSPACE_DIR = ${PROJECT_DIR}/backend
+DEVCONTAINER_DIR = ${WORKSPACE_DIR}/.devcontainer
 
-DOCKER_COMPOSE_FILE = ${PROJECT_DIR}/backend/docker-compose.yml
-DOCKER_COMPOSE_PRODUCTION_FILE = ${PROJECT_DIR}/backend/docker/local/docker-compose.production.yml
+DOCKER_COMPOSE_FILE = ${WORKSPACE_DIR}/docker-compose.yml
+DOCKER_COMPOSE_PRODUCTION_FILE = ${WORKSPACE_DIR}/docker/local/docker-compose.production.yml
 
 # コマンドの一覧
 #   make だけで実行されたときに実行される
@@ -47,33 +47,30 @@ run: stop build
 test:
 	docker-compose \
 		-f ${DOCKER_COMPOSE_FILE} \
-		-f ${PROJECT_DIR}/backend/docker/local/docker-compose.test.yml \
-		-p ${PROJECT_DIR_NAME}_test \
+		-f ${WORKSPACE_DIR}/docker/local/docker-compose.test.yml \
+		-p ${IMAGE_AP_REPOSITORY}_test \
 		up --build ap
 	docker-compose \
 		-f ${DOCKER_COMPOSE_FILE} \
-		-f ${PROJECT_DIR}/backend/docker/local/docker-compose.test.yml \
-		-p ${PROJECT_DIR_NAME}_test \
+		-f ${WORKSPACE_DIR}/docker/local/docker-compose.test.yml \
+		-p ${IMAGE_AP_REPOSITORY}_test \
 		down -v
 
-# DBマイグレーションの実行
-db_migrate: build
-	docker run --rm -i -t --network bbs_default \
-		${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} \
-		flask db upgrade
+# DBマイグレーションの実行 (開発用)
+db_migrate:
+	source ./.venv/bin/activate \
+		&& cd src \
+		&& sh ./docker-entrypoint.sh migrate
 
-# DBの初期化
+# DBの初期化 (開発用)
 db_init:
-	docker run --rm -i -t --network bbs_default \
-		mysql:8.0.15 \
-		bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -h db -u ${MYSQL_USER} ${MYSQL_DATABASE} -e \
-				"DROP DATABASE IF EXISTS ${MYSQL_DATABASE}; CREATE DATABASE ${MYSQL_DATABASE};"'
+	mycli -d local -e "DROP DATABASE IF EXISTS ${MYSQL_DATABASE}; CREATE DATABASE ${MYSQL_DATABASE};"'
 
-# 開発用のイメージをビルド
-build_dev:
-	docker build \
-		-f ${DEVCONTAINER_DIR}/Dockerfile \
-		-t ${IMAGE_AP_REPOSITORY}:development .
+# アプリケーションの起動 (開発用)
+dev:
+	source ./.venv/bin/activate \
+		&& cd src \
+		&& sh ./docker-entrypoint.sh dev
 
 # コンテナ、イメージ、ネットワーク、ボリュームの削除
 clean_all: clean
