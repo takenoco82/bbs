@@ -49,7 +49,17 @@ test:
 		-f ${DOCKER_COMPOSE_FILE} \
 		-f ${WORKSPACE_DIR}/docker/local/docker-compose.test.yml \
 		-p ${IMAGE_AP_REPOSITORY}_test \
-		up --build ap
+		build ap
+	docker-compose \
+		-f ${DOCKER_COMPOSE_FILE} \
+		-f ${WORKSPACE_DIR}/docker/local/docker-compose.test.yml \
+		-p ${IMAGE_AP_REPOSITORY}_test \
+		run ap lint
+	docker-compose \
+		-f ${DOCKER_COMPOSE_FILE} \
+		-f ${WORKSPACE_DIR}/docker/local/docker-compose.test.yml \
+		-p ${IMAGE_AP_REPOSITORY}_test \
+		run ap test
 	docker-compose \
 		-f ${DOCKER_COMPOSE_FILE} \
 		-f ${WORKSPACE_DIR}/docker/local/docker-compose.test.yml \

@@ -16,5 +16,8 @@ jobs:
           command: docker build -f ./src/Dockerfile --target test -t ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} .
           working_directory: backend
       - run:
+          name: Run lint
+          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} lint
+      - run:
           name: Run test
-          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG}
+          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} test

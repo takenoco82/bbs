@@ -66,11 +66,11 @@ function main() {
       #   https://flask.palletsprojects.com/en/1.1.x/quickstart/
       flask run --host 0.0.0.0 --port 5000
       ;;
-    test)
-      # lint
+    lint)
       info "lint start"
       flake8
-      # test
+      ;;
+    test)
       info "small test start"
       pytest -m small tests
       ;;
