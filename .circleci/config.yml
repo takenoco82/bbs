@@ -3,6 +3,7 @@ jobs:
   test:
     environment:
       IMAGE_AP_REPOSITORY: bbs
+      IMAGE_AP_TARGET: test
       IMAGE_AP_TAG: test
     docker:
       - image: circleci/buildpack-deps:stretch
@@ -13,7 +14,7 @@ jobs:
           docker_layer_caching: false
       - run:
           name: Build Docker Image
-          command: docker build -f ./src/Dockerfile --target ${IMAGE_AP_TAG} -t ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} .
+          command: docker build -f ./src/Dockerfile --target ${IMAGE_AP_TARGET} -t ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} .
           working_directory: backend
       - run:
           name: Run lint
@@ -24,14 +25,15 @@ jobs:
   build:
     environment:
       IMAGE_AP_REPOSITORY: bbs
-      IMAGE_AP_TAG: production
+      IMAGE_AP_TARGET: production
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
+      - checkout
       - setup_remote_docker
       - run:
           name: Build Docker Image
-          command: docker build -f ./src/Dockerfile --target ${IMAGE_AP_TAG} -t ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${CIRCLE_BRANCH} .
+          command: docker build -f ./src/Dockerfile --target ${IMAGE_AP_TARGET} -t ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${CIRCLE_BRANCH} .
           working_directory: backend
       - run:
           name: Publish Docker Image to Docker Hub
