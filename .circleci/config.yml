@@ -17,10 +17,10 @@ jobs:
           working_directory: backend
       - run:
           name: Run lint
-          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} lint
+          command: docker run --rm ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} lint
       - run:
           name: Run test
-          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} test
+          command: docker run --rm ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} test
   build:
     environment:
       IMAGE_AP_REPOSITORY: bbs
