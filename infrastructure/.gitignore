@@ -1,0 +1,10 @@
+# Terraform
+.terraform/
+backend.tfvars
+terraform.tfvars
+
+# devcontainer
+!.devcontainer/dotfiles
+.devcontainer/dotfiles/*
+!.devcontainer/dotfiles/.gitkeep
+.devcontainer/user-settings.sh
