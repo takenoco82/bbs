@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     environment:
-      IMAGE_AP_REPOSITORY: bbs
+      IMAGE_AP_REPOSITORY_NAME: bbs
       IMAGE_AP_TARGET: test
       IMAGE_AP_TAG: test
     docker:
@@ -14,17 +14,19 @@ jobs:
           docker_layer_caching: false
       - run:
           name: Build Docker Image
-          command: docker build -f ./src/Dockerfile --target ${IMAGE_AP_TARGET} -t ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} .
+          command: |
+            export IMAGE_AP_REPOSITORY=${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY_NAME}
+            docker build -f ./src/Dockerfile --target ${IMAGE_AP_TARGET} -t ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} .
           working_directory: backend
       - run:
           name: Run lint
-          command: docker run --rm ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} lint
+          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} lint
       - run:
           name: Run test
-          command: docker run --rm ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} test
+          command: docker run --rm ${IMAGE_AP_REPOSITORY}:${IMAGE_AP_TAG} test
   build:
     environment:
-      IMAGE_AP_REPOSITORY: bbs
+      IMAGE_AP_REPOSITORY_NAME: bbs
       IMAGE_AP_TARGET: production
     docker:
       - image: circleci/buildpack-deps:stretch
@@ -33,13 +35,15 @@ jobs:
       - setup_remote_docker
       - run:
           name: Build Docker Image
-          command: docker build -f ./src/Dockerfile --target ${IMAGE_AP_TARGET} -t ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${CIRCLE_BRANCH} .
+          command: |
+            export IMAGE_AP_REPOSITORY=${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY_NAME}
+            docker build -f ./src/Dockerfile --target ${IMAGE_AP_TARGET} -t ${IMAGE_AP_REPOSITORY}:${CIRCLE_BRANCH} .
           working_directory: backend
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "${DOCKERHUB_PASS}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
-            docker push ${DOCKERHUB_USERNAME}/${IMAGE_AP_REPOSITORY}:${CIRCLE_BRANCH}
+            docker push ${IMAGE_AP_REPOSITORY}:${CIRCLE_BRANCH}
 workflows:
   version: 2
   test-build:
