@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  web:
+    ports:
+      - "80:80"
+  ap:
+    volumes:
+      - ./log:/var/log/bbs:cached
