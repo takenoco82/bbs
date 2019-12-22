@@ -58,7 +58,9 @@ function main() {
       ;;
     migrate)
       info "DB migration start"
+      flask db current
       flask db upgrade
+      flask db history
       ;;
     dev)
       info "develop server start"
