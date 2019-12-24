@@ -39,12 +39,6 @@ RUN apk add --no-cache --virtual=awscli-deps groff && \
     pip install --no-cache-dir docker-compose && \
     apk del mycli-deps docker-compose-deps
 
-# install terraform
-ARG TERRAFORM_VERSION=0.12.16
-RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin && \
-    rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-
 # install starship
 RUN wget https://github.com/starship/starship/releases/download/v0.22.0/starship-x86_64-unknown-linux-musl.tar.gz && \
     tar -xzf starship-x86_64-unknown-linux-musl.tar.gz && \
