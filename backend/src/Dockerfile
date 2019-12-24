@@ -8,6 +8,7 @@ RUN apk add --no-cache tzdata && \
 WORKDIR /bbs
 
 # install python package manager
+ENV POETRY_VERSION=1.0.0
 RUN apk add --no-cache curl && \
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python && \
     ln -s -f $HOME/.poetry/bin/poetry /usr/local/bin/poetry
